@@ -8,6 +8,17 @@ body{
 	font-family: 'Nunito', sans-serif;
 	background: linear-gradient(to bottom, #ffffff, #ffffff, #ffffff);
 }
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
 .main{
 	width: 350px;
 	height: 500px;
@@ -17,23 +28,34 @@ body{
 	border-radius: 10px;
 	box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
 }
-#chk{
-	display: none;
+.toggle-input{
+	left: 0;
+	top: 0;
 }
 .signup{
 	position: relative;
 	width:100%;
 	height: 100%;
 }
-label{
+.form-title{
+	margin: 60px;
+}
+.toggle-label{
 	color: rgb(104, 62, 195);
 	font-size: 2.3em;
 	justify-content: center;
 	display: flex;
-	margin: 60px;
 	font-weight: bold;
 	cursor: pointer;
 	transition: .5s ease-in-out;
+}
+.field-label{
+	width: 60%;
+	display: block;
+	margin: 0 auto 6px;
+	color: #2f1d55;
+	font-size: 0.95rem;
+	font-weight: 700;
 }
 input{
 	width: 60%;
@@ -41,14 +63,11 @@ input{
 	background: #fefeff;
 	justify-content: center;
 	display: flex;
-	margin: 20px auto;
+	margin: 0 auto 20px;
 	padding: 10px;
-	border: none;
-	outline: none;
+	border: 2px solid transparent;
 	border-radius: 10px;
 	box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
-
-    
 }
 .button{
 	width: 60%;
@@ -61,7 +80,6 @@ input{
 	font-size: 1em;
 	font-weight: bold;
 	margin-top: 20px;
-	outline: none;
 	border: none;
 	border-radius: 5px;
 	transition: .2s ease-in;
@@ -70,6 +88,17 @@ input{
 .button:hover{
 	background: #512d93;
 }
+.button:focus-visible,
+input:focus-visible,
+.toggle-input:focus-visible ~ .signup .toggle-label,
+.toggle-input:focus-visible ~ .login .toggle-label{
+	outline: 3px solid #1d7df2;
+	outline-offset: 3px;
+}
+input:focus-visible{
+	border-color: #1d7df2;
+	box-shadow: 0 0 0 4px rgba(29, 125, 242, 0.2);
+}
 .login{
 	height: 460px;
 	background: rgb(218, 213, 213);
@@ -77,7 +106,7 @@ input{
 	transform: translateY(-180px);
 	transition: .8s ease-in-out;
 }
-.login label{
+.login .toggle-label{
 	color: #573b8a;
 	transform: scale(.6);
 }
