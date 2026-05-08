@@ -1,0 +1,160 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{iftex}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\urlstyle{same}
+\sloppy
+
+\ifPDFTeX
+  \usepackage{helvet}
+  \renewcommand{\familydefault}{\sfdefault}
+\else
+  \usepackage{fontspec}
+  \setmainfont{Arial}
+  \setsansfont{Arial}
+  \setmonofont{Menlo}
+\fi
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-3.5ex \@plus -1ex \@minus -.2ex}%
+  {2.3ex \@plus .2ex}%
+  {\normalfont\bfseries\fontsize{14}{16}\selectfont}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-3.25ex \@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\bfseries\fontsize{12}{14}\selectfont}}
+\makeatother
+
+\title{CPT304 Coursework 1 Report\\Taskify Research-Led Software Enhancement}
+\author{Group XX}
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\section{App Selection}
+Taskify was chosen because it is a task-management app with a simple user journey: a visitor signs up or logs in, then manages tasks on the dashboard. That made it practical to audit the project from the page templates through to the Express routes and tests. The app was also not already polished to the coursework baseline. It had issues in accessibility, backend form handling, persistence, test coverage, and compliance pages. Those gaps made it a good project for small, traceable fixes rather than a broad rewrite.
+
+\section{Authentication Form Fields Relied on Placeholder Text}
+
+\subsection{Detection}
+The issue was first found while checking \texttt{views/signup.ejs}. The sign-up and login inputs had placeholder text, but the user-entered fields did not have their own visible labels or matching \texttt{id}/\texttt{for} pairs. This was easy to miss because the page looked acceptable before typing. The problem appeared once text was entered: the placeholder disappeared, leaving the filled username field without a visible field name. The browser evidence in Figure~\ref{fig:auth-form-labels} shows that exact before and after state.
+
+\subsection{Literature}
+W3C WAI's form tutorial explains that labels should identify form controls and should be programmatically connected to the matching input, usually by pairing \texttt{label for} with an input \texttt{id} \cite{w3c-labels}. WebAIM gives the same practical warning: placeholder text may be useful as a hint, but it should not replace a real label because it disappears during entry and can make review harder \cite{webaim-forms}. This means the fix needed to be semantic, not just visual.
+
+\subsection{Implementation}
+The original field relied on the placeholder to describe the input:
+
+\noindent\textbf{Before fix: placeholder-only email field.}
+{\footnotesize
+\begin{verbatim}
+<input type="email" name="SignUpEmail"
+  placeholder="Email" required="true" />
+\end{verbatim}
+}
+
+The updated page keeps the hint text, but adds a real label and a stable association:
+
+\noindent\textbf{After fix: visible label connected to the input.}
+{\footnotesize
+\begin{verbatim}
+<label class="field-label" for="signup-email">Email</label>
+<input id="signup-email" type="email" name="SignUpEmail"
+  autocomplete="email" placeholder="Email" required />
+\end{verbatim}
+}
+
+The same pattern was applied to the username, password, login email, and login password fields. The CSS was also split so the large panel switch labels use \texttt{.toggle-label}, while normal input labels use \texttt{.field-label}. That avoided turning every form label into a page heading. The final result keeps the field name visible after typing and gives assistive technology a clear label-to-control relationship.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/auth-form-labels-before-after.png}
+  \caption{Authentication form label evidence. Before the fix, the username placeholder disappears after typing and no field label remains. After the fix, the visible ``User name'' label stays above the filled input.}
+  \label{fig:auth-form-labels}
+\end{figure}
+
+\section{Auth Forms Submitted to Missing Backend Routes}
+
+\subsection{Detection}
+The next issue came from following the same forms through to the backend. In \texttt{views/signup.ejs}, the sign-up form submitted \texttt{POST /signup} and the login form submitted \texttt{POST /login}. In the earlier \texttt{src/app.js}, Express only defined \texttt{GET /}, \texttt{GET /signup}, and \texttt{GET /dashboard}. A direct curl check confirmed the bug: a valid \texttt{POST /signup} returned \texttt{HTTP/1.1 404 Not Found}. In practice, a user could fill the form correctly and still be sent to a missing route.
+
+\subsection{Literature}
+Express routing is matched by both HTTP method and path, so \texttt{GET /signup} does not handle \texttt{POST /signup} \cite{express-routing}. OWASP's Input Validation Cheat Sheet was used because direct POST requests can bypass browser validation, so required fields and email format still need server-side checks \cite{owasp-input-validation}. MDN's \texttt{303 See Other} documentation was used for the successful response: after a POST, the browser should be redirected to a GET page such as \texttt{/dashboard} \cite{mdn-303}.
+
+\subsection{Implementation}
+The earlier backend rendered the sign-up page but did not process its submission:
+
+\noindent\textbf{Before fix: sign-up page existed, but no POST handler existed.}
+{\footnotesize
+\begin{verbatim}
+app.get("/signup", (req, res) => {
+    res.status(200).render("signup.ejs");
+});
+\end{verbatim}
+}
+
+The fix added method-specific POST handlers for the existing form actions:
+
+\noindent\textbf{After fix: server-side validation and Post/Redirect/Get.}
+{\footnotesize
+\begin{verbatim}
+app.post("/signup", (req, res) => {
+    const missingFields = collectMissingFields(req.body, [
+        "SignUpUsername", "SignUpEmail", "SignUpPassword",
+    ]);
+
+    if (missingFields.length > 0 || !isValidEmail(req.body.SignUpEmail)) {
+        return res.status(400).json({
+            success: false,
+            errors: {
+                missingFields,
+                email: isValidEmail(req.body.SignUpEmail) ? undefined
+                    : "Enter a valid email address.",
+            },
+        });
+    }
+
+    return res.redirect(303, "/dashboard");
+});
+\end{verbatim}
+}
+
+The same approach was added for \texttt{POST /login}. The app now rejects invalid email input with \texttt{400 Bad Request} and redirects valid submissions with \texttt{303 See Other}. To make this testable, \texttt{src/app.js} exports the Express app and only starts \texttt{listen()} when run directly, so \texttt{node --test} can run the route checks on a temporary port.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{figures/auth-http-evidence.png}
+  \caption{Backend route evidence. Before the fix, a valid \texttt{POST /signup} returned 404. After the fix, valid sign-up and login submissions return \texttt{303 See Other} to \texttt{/dashboard}, while invalid email input is rejected with \texttt{400 Bad Request}.}
+  \label{fig:auth-http-evidence}
+\end{figure}
+
+\section{Deficiency 3 Placeholder}
+\textbf{TODO:} Insert the third completed deficiency. Include detection method, literature source, implementation rationale, and real before-vs-after code.
+
+\section{Deficiency 4 Placeholder}
+\textbf{TODO:} Insert the fourth completed deficiency. Include detection method, literature source, implementation rationale, and real before-vs-after code.
+
+\section{Baseline Standards Evidence}
+\textbf{TODO:} Add concise evidence and screenshots for the required baseline standards: 7-day Vercel/Render uptime, Codecov/Istanbul coverage of at least 80\%, Lighthouse Accessibility score of at least 90, a two-language i18n toggle, a cookie banner, and a privacy policy page. Each screenshot must have a figure number and descriptive caption.
+
+\section{Individual Contribution Forms}
+\textbf{TODO:} Insert or reference the four individual contribution forms. These are excluded from the word count. Add direct links to authored pull requests where required by the marking scheme.
+
+\section{References}
+\renewcommand{\refname}{}
+\vspace{-2em}
+\begin{thebibliography}{9}
+\bibitem{w3c-labels} W3C Web Accessibility Initiative, ``Labeling Controls,'' Forms Tutorial. [Online]. Available: \url{https://www.w3.org/WAI/tutorials/forms/labels/}. Accessed: May 8, 2026.
+\bibitem{webaim-forms} WebAIM, ``Creating Accessible Forms -- Advanced Form Labeling.'' [Online]. Available: \url{https://webaim.org/techniques/forms/advanced}. Accessed: May 8, 2026.
+\bibitem{express-routing} Express, ``Routing.'' [Online]. Available: \url{https://expressjs.com/en/guide/routing.html}. Accessed: May 8, 2026.
+\bibitem{owasp-input-validation} OWASP Cheat Sheet Series, ``Input Validation Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html}. Accessed: May 8, 2026.
+\bibitem{mdn-303} MDN Web Docs, ``303 See Other.'' [Online]. Available: \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/303}. Accessed: May 8, 2026.
+\end{thebibliography}
+
+\end{document}
