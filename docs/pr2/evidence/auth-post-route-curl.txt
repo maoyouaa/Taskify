@@ -1,0 +1,38 @@
+Before fix (origin/main): POST /signup returned 404 Not Found
+$ curl -i -X POST http://localhost:3000/signup -H "Content-Type: application/x-www-form-urlencoded" --data "SignUpUsername=Alex&SignUpEmail=alex@example.com&SignUpPassword=password123"
+HTTP/1.1 404 Not Found
+
+After fix: POST /signup redirects with Post/Redirect/Get
+$ curl -i -X POST http://localhost:3000/signup -H "Content-Type: application/x-www-form-urlencoded" --data "SignUpUsername=Alex&SignUpEmail=alex@example.com&SignUpPassword=password123"
+HTTP/1.1 303 See Other
+X-Powered-By: Express
+Location: /dashboard
+Vary: Accept
+Content-Type: text/plain; charset=utf-8
+Content-Length: 36
+Date: Fri, 08 May 2026 07:40:38 GMT
+Connection: keep-alive
+
+After fix: POST /login redirects with Post/Redirect/Get
+$ curl -i -X POST http://localhost:3000/login -H "Content-Type: application/x-www-form-urlencoded" --data "LoginEmail=alex@example.com&LoginPassword=password123"
+HTTP/1.1 303 See Other
+X-Powered-By: Express
+Location: /dashboard
+Vary: Accept
+Content-Type: text/plain; charset=utf-8
+Content-Length: 36
+Date: Fri, 08 May 2026 07:40:38 GMT
+Connection: keep-alive
+
+After fix: invalid email is rejected server-side
+$ curl -i -X POST http://localhost:3000/signup -H "Content-Type: application/x-www-form-urlencoded" --data "SignUpUsername=Alex&SignUpEmail=not-an-email&SignUpPassword=password123"
+HTTP/1.1 400 Bad Request
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 86
+ETag: W/"56-b6iqemNlo3gdCInwkd1cZaQorO4"
+Date: Fri, 08 May 2026 07:40:38 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"success":false,"errors":{"missingFields":[],"email":"Enter a valid email address."}}
