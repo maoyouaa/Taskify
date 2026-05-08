@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,10 +12,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
   <link rel="stylesheet" href="../../static/styles/main.css" />
   <link rel="stylesheet" href="../../static/styles/dashboard/dashboard.css">
+  <link rel="stylesheet" href="../../static/styles/partials/dashboard/dashboard-cards.css" />
+</head>
 
 <body>
-  <!-- The main dashboard is here  -->
-
   <div class="dashboard-content-container">
     <div class="dashboard-sidebar-container">
       <%-include("../partials/dashboard/dashboard-sidebar.ejs") %>
@@ -26,7 +25,6 @@
       <%-include("../partials/dashboard/dashboard-cards.ejs") %>
     </div>
   </div>
-
+  <script src="../../static/js/dashboard.js"></script>
 </body>
-
 </html>
