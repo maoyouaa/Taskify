@@ -1,3 +1,5 @@
+import { persistTasks, safeLoadTasks } from "./modules/task-store.mjs";
+
 const labels = {
   todo: "To do",
   doing: "In progress",
@@ -49,7 +51,7 @@ const metrics = {
 };
 
 let state = {
-  tasks: seedTasks.map((task) => ({ ...task })),
+  tasks: safeLoadTasks(window.localStorage, seedTasks.map((task) => ({ ...task }))).tasks,
 };
 
 function showMessage(text, tone = "neutral") {
@@ -93,6 +95,10 @@ function createActionButton(text, handler, variant = "secondary") {
   return button;
 }
 
+function persistState() {
+  persistTasks(window.localStorage, state.tasks);
+}
+
 function saveTask(task) {
   const existingIndex = state.tasks.findIndex((item) => item.id === task.id);
 
@@ -106,12 +112,14 @@ function saveTask(task) {
     showMessage("Task updated successfully.");
   }
 
+  persistState();
   renderBoard();
   resetForm();
 }
 
 function deleteTask(taskId) {
   state.tasks = state.tasks.filter((task) => task.id !== taskId);
+  persistState();
 
   if (form.elements.taskId.value === taskId) {
     resetForm();
@@ -123,6 +131,7 @@ function deleteTask(taskId) {
 
 function moveTask(taskId, nextStatus, messageText) {
   state.tasks = state.tasks.map((task) => (task.id === taskId ? { ...task, status: nextStatus } : task));
+  persistState();
   renderBoard();
   showMessage(messageText);
 }
