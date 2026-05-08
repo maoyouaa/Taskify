@@ -46,7 +46,7 @@ Taskify was chosen because it is a task-management app with a simple user journe
 The issue was first found while checking \texttt{views/signup.ejs}. The sign-up and login inputs had placeholder text, but the user-entered fields did not have their own visible labels or matching \texttt{id}/\texttt{for} pairs. This was easy to miss because the page looked acceptable before typing. The problem appeared once text was entered: the placeholder disappeared, leaving the filled username field without a visible field name. The browser evidence in Figure~\ref{fig:auth-form-labels} shows that exact before and after state.
 
 \subsection{Literature}
-W3C WAI's form tutorial explains that labels should identify form controls and should be programmatically connected to the matching input, usually by pairing \texttt{label for} with an input \texttt{id} \cite{w3c-labels}. WebAIM gives the same practical warning: placeholder text may be useful as a hint, but it should not replace a real label because it disappears during entry and can make review harder \cite{webaim-forms}. This means the fix needed to be semantic, not just visual.
+WCAG 2.2 Success Criterion 3.3.2 requires labels or instructions when content needs user input \cite{wcag-332}. W3C Technique H44 gives the implementation detail used here: explicit \texttt{label} elements can be connected to controls through matching \texttt{for} and \texttt{id} values, and visible labels also help users understand the field before and after typing \cite{w3c-h44}. This made the fix semantic rather than only visual.
 
 \subsection{Implementation}
 The original field relied on the placeholder to describe the input:
@@ -79,13 +79,13 @@ The same pattern was applied to the username, password, login email, and login p
   \label{fig:auth-form-labels}
 \end{figure}
 
-\section{Auth Forms Submitted to Missing Backend Routes}
+\section{Authentication Forms Submitted to Missing Backend Routes}
 
 \subsection{Detection}
 The next issue came from following the same forms through to the backend. In \texttt{views/signup.ejs}, the sign-up form submitted \texttt{POST /signup} and the login form submitted \texttt{POST /login}. In the earlier \texttt{src/app.js}, Express only defined \texttt{GET /}, \texttt{GET /signup}, and \texttt{GET /dashboard}. A direct curl check confirmed the bug: a valid \texttt{POST /signup} returned \texttt{HTTP/1.1 404 Not Found}. In practice, a user could fill the form correctly and still be sent to a missing route.
 
 \subsection{Literature}
-Express routing is matched by both HTTP method and path, so \texttt{GET /signup} does not handle \texttt{POST /signup} \cite{express-routing}. OWASP's Input Validation Cheat Sheet was used because direct POST requests can bypass browser validation, so required fields and email format still need server-side checks \cite{owasp-input-validation}. MDN's \texttt{303 See Other} documentation was used for the successful response: after a POST, the browser should be redirected to a GET page such as \texttt{/dashboard} \cite{mdn-303}.
+Express routing is matched by both HTTP method and path, so \texttt{GET /signup} does not handle \texttt{POST /signup} \cite{express-routing}. OWASP's Input Validation Cheat Sheet was used because direct POST requests can bypass browser validation, so required fields and email format still need server-side checks \cite{owasp-input-validation}. RFC 9110 was used for the success path: \texttt{303 See Other} redirects the user agent to a different resource identified by the \texttt{Location} header, which fits a Post/Redirect/Get flow to \texttt{/dashboard} \cite{rfc9110}.
 
 \subsection{Implementation}
 The earlier backend rendered the sign-up page but did not process its submission:
@@ -144,17 +144,17 @@ The same approach was added for \texttt{POST /login}. The app now rejects invali
 \textbf{TODO:} Add concise evidence and screenshots for the required baseline standards: 7-day Vercel/Render uptime, Codecov/Istanbul coverage of at least 80\%, Lighthouse Accessibility score of at least 90, a two-language i18n toggle, a cookie banner, and a privacy policy page. Each screenshot must have a figure number and descriptive caption.
 
 \section{Individual Contribution Forms}
-\textbf{TODO:} Insert or reference the four individual contribution forms. These are excluded from the word count. Add direct links to authored pull requests where required by the marking scheme.
+The completed contribution workbook is included as a separate submission artifact: \texttt{individual-contribution.xlsx}. This file is excluded from the report word count and is the place where individual contribution evidence and pull-request links are recorded.
 
 \section{References}
 \renewcommand{\refname}{}
 \vspace{-2em}
 \begin{thebibliography}{9}
-\bibitem{w3c-labels} W3C Web Accessibility Initiative, ``Labeling Controls,'' Forms Tutorial. [Online]. Available: \url{https://www.w3.org/WAI/tutorials/forms/labels/}. Accessed: May 8, 2026.
-\bibitem{webaim-forms} WebAIM, ``Creating Accessible Forms -- Advanced Form Labeling.'' [Online]. Available: \url{https://webaim.org/techniques/forms/advanced}. Accessed: May 8, 2026.
+\bibitem{wcag-332} W3C Web Accessibility Initiative, ``Understanding Success Criterion 3.3.2: Labels or Instructions.'' [Online]. Available: \url{https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html}. Accessed: May 8, 2026.
+\bibitem{w3c-h44} W3C Web Accessibility Initiative, ``H44: Using label elements to associate text labels with form controls.'' [Online]. Available: \url{https://www.w3.org/WAI/WCAG22/Techniques/html/H44}. Accessed: May 8, 2026.
 \bibitem{express-routing} Express, ``Routing.'' [Online]. Available: \url{https://expressjs.com/en/guide/routing.html}. Accessed: May 8, 2026.
 \bibitem{owasp-input-validation} OWASP Cheat Sheet Series, ``Input Validation Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html}. Accessed: May 8, 2026.
-\bibitem{mdn-303} MDN Web Docs, ``303 See Other.'' [Online]. Available: \url{https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/303}. Accessed: May 8, 2026.
+\bibitem{rfc9110} R. Fielding, M. Nottingham, and J. Reschke, ``HTTP Semantics,'' RFC 9110, Jun. 2022. [Online]. Available: \url{https://www.rfc-editor.org/rfc/rfc9110}. Accessed: May 8, 2026.
 \end{thebibliography}
 
 \end{document}
