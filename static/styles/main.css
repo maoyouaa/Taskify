@@ -106,3 +106,28 @@ body {
   max-width: 1200px;
   padding: var(--gen-padding);
 }
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.lang-switch-button {
+  min-width: 44px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--clr-black-75);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lang-switch-button.is-active {
+  background: #9900f8;
+  color: #fff;
+}

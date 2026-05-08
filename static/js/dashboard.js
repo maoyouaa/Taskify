@@ -1,13 +1,8 @@
 import { persistTasks, safeLoadTasks } from "./modules/task-store.mjs";
 
-const labels = {
-  todo: "To do",
-  doing: "In progress",
-  done: "Completed",
-  high: "High",
-  medium: "Medium",
-  low: "Low",
-};
+function t(key) {
+  return window.TaskifyI18n ? window.TaskifyI18n.t(key) : key;
+}
 
 const seedTasks = [
   {
@@ -64,7 +59,7 @@ function resetForm() {
   form.elements.taskId.value = "";
   form.elements.status.value = "todo";
   form.elements.priority.value = "high";
-  submitButton.textContent = "Save task";
+  submitButton.textContent = t("dashboard.saveTask");
 }
 
 function fillForm(task) {
@@ -75,7 +70,7 @@ function fillForm(task) {
   form.elements.priority.value = task.priority;
   form.elements.owner.value = task.owner;
   form.elements.dueDate.value = task.dueDate;
-  submitButton.textContent = "Update task";
+  submitButton.textContent = t("dashboard.updateTask");
 }
 
 function getMetrics(tasks) {
@@ -104,12 +99,12 @@ function saveTask(task) {
 
   if (existingIndex === -1) {
     state.tasks = [task, ...state.tasks];
-    showMessage("Task saved successfully.");
+    showMessage(t("dashboard.taskSaved"));
   } else {
     const nextTasks = state.tasks.slice();
     nextTasks[existingIndex] = task;
     state.tasks = nextTasks;
-    showMessage("Task updated successfully.");
+    showMessage(t("dashboard.taskUpdated"));
   }
 
   persistState();
@@ -126,7 +121,7 @@ function deleteTask(taskId) {
   }
 
   renderBoard();
-  showMessage("Task deleted successfully.");
+  showMessage(t("dashboard.taskDeleted"));
 }
 
 function moveTask(taskId, nextStatus, messageText) {
@@ -148,25 +143,25 @@ function renderTask(task) {
 
   const priority = document.createElement("span");
   priority.className = `priority-chip priority-${task.priority}`;
-  priority.textContent = labels[task.priority];
+  priority.textContent = t(`dashboard.priority.${task.priority}`);
 
   header.append(title, priority);
 
   const details = document.createElement("p");
-  details.textContent = task.details || "No details added yet.";
+  details.textContent = task.details || t("dashboard.noDetails");
 
   const meta = document.createElement("div");
   meta.className = "task-meta";
 
   if (task.owner) {
     const owner = document.createElement("span");
-    owner.textContent = `Owner: ${task.owner}`;
+    owner.textContent = `${t("dashboard.owner")}: ${task.owner}`;
     meta.appendChild(owner);
   }
 
   if (task.dueDate) {
     const due = document.createElement("span");
-    due.textContent = `Due: ${task.dueDate}`;
+    due.textContent = `${t("dashboard.due")}: ${task.dueDate}`;
     meta.appendChild(due);
   }
 
@@ -174,26 +169,26 @@ function renderTask(task) {
   actions.className = "task-actions";
 
   actions.append(
-    createActionButton("Edit", () => {
+    createActionButton(t("dashboard.edit"), () => {
       fillForm(task);
       form.elements.title.focus();
-      showMessage("Task loaded for editing.");
+      showMessage(t("dashboard.taskLoaded"));
     })
   );
 
   if (task.status === "todo") {
-    actions.append(createActionButton("Start", () => moveTask(task.id, "doing", "Task moved to In progress."), "primary"));
+    actions.append(createActionButton(t("dashboard.start"), () => moveTask(task.id, "doing", t("dashboard.taskMovedDoing")), "primary"));
   }
 
   if (task.status === "doing") {
-    actions.append(createActionButton("Complete", () => moveTask(task.id, "done", "Task marked as completed."), "primary"));
+    actions.append(createActionButton(t("dashboard.complete"), () => moveTask(task.id, "done", t("dashboard.taskMovedDone")), "primary"));
   }
 
   if (task.status === "done") {
-    actions.append(createActionButton("Reset", () => moveTask(task.id, "todo", "Task returned to To do.")));
+    actions.append(createActionButton(t("dashboard.reset"), () => moveTask(task.id, "todo", t("dashboard.taskMovedTodo"))));
   }
 
-  actions.append(createActionButton("Delete", () => deleteTask(task.id), "danger"));
+  actions.append(createActionButton(t("dashboard.delete"), () => deleteTask(task.id), "danger"));
 
   card.append(header, details, meta, actions);
   return card;
@@ -236,7 +231,7 @@ function renderBoard() {
     if (grouped[column.key].length === 0) {
       const empty = document.createElement("p");
       empty.className = "empty-state";
-      empty.textContent = "No tasks in this stage yet.";
+      empty.textContent = t("dashboard.emptyState");
       section.appendChild(empty);
     } else {
       grouped[column.key].forEach((task) => section.appendChild(renderTask(task)));
@@ -255,7 +250,7 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   if (!form.reportValidity()) {
-    showMessage("Please complete the required task fields before saving.", "error");
+    showMessage(t("dashboard.formInvalid"), "error");
     return;
   }
 
@@ -275,7 +270,13 @@ form.addEventListener("submit", (event) => {
 
 resetButton.addEventListener("click", () => {
   resetForm();
-  showMessage("Form cleared.");
+  showMessage(t("dashboard.formCleared"));
+});
+
+window.addEventListener("taskify:languagechange", () => {
+  renderBoard();
+  submitButton.textContent = form.elements.taskId.value ? t("dashboard.updateTask") : t("dashboard.saveTask");
+  showMessage(t("dashboard.workspaceReady"));
 });
 
 renderBoard();

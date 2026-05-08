@@ -7,64 +7,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../static/styles/signup.css" />
-  <title>SignUp</title>
+  <title data-i18n-document-title="document.signup">SignUp</title>
 </head>
 
 <body>
   <section class="section signup-section">
     <div class="container signup-container">
       <div class="main">
+        <div class="auth-lang-switch" aria-label="Language switcher">
+          <button class="auth-lang-button" type="button" data-lang-value="en" data-i18n="lang.en">EN</button>
+          <button class="auth-lang-button" type="button" data-lang-value="zh" data-i18n="lang.zh">中文</button>
+        </div>
         <input type="checkbox" id="chk" class="visually-hidden toggle-input" />
 
         <div class="signup">
           <form method="post" action="/signup">
             <h1 class="form-title">
-              <label for="chk" class="toggle-label">Sign up</label>
+              <label for="chk" class="toggle-label" data-i18n="signup.title">Sign up</label>
             </h1>
             <div class="signup-username">
-              <label class="field-label" for="signup-username">User name</label>
+              <label class="field-label" for="signup-username" data-i18n="signup.username">User name</label>
               <input id="signup-username" type="text" name="SignUpUsername" autocomplete="username"
-                placeholder="User name" required />
+                data-i18n-placeholder="signup.placeholder.username" placeholder="User name" required />
             </div>
             <div class="signup-email">
-              <label class="field-label" for="signup-email">Email</label>
-              <input id="signup-email" type="email" name="SignUpEmail" autocomplete="email" placeholder="Email"
-                required />
+              <label class="field-label" for="signup-email" data-i18n="signup.email">Email</label>
+              <input id="signup-email" type="email" name="SignUpEmail" autocomplete="email"
+                data-i18n-placeholder="signup.placeholder.email" placeholder="Email" required />
             </div>
             <div class="signup-password">
-              <label class="field-label" for="signup-password">Password</label>
+              <label class="field-label" for="signup-password" data-i18n="signup.password">Password</label>
               <input id="signup-password" type="password" name="SignUpPassword" autocomplete="new-password"
-                placeholder="Password" required />
+                data-i18n-placeholder="signup.placeholder.password" placeholder="Password" required />
             </div>
             <div>
-              <input class="button" name="SignUpSubmit" type="submit" value="Sign up" />
+              <input class="button" name="SignUpSubmit" type="submit" data-i18n-value="signup.submit" value="Sign up" />
             </div>
           </form>
         </div>
         <div class="login">
           <form method="post" action="/login">
             <h2 class="form-title">
-              <label for="chk" class="toggle-label">Login</label>
+              <label for="chk" class="toggle-label" data-i18n="login.title">Login</label>
             </h2>
             <div class="signup-email">
-              <label class="field-label" for="login-email">Email</label>
+              <label class="field-label" for="login-email" data-i18n="login.email">Email</label>
               <input id="login-email" type="email" name="LoginEmail" autocomplete="email"
-                placeholder="Enter your email" required />
+                data-i18n-placeholder="login.placeholder.email" placeholder="Enter your email" required />
             </div>
             <div class="signup-password">
-              <label class="field-label" for="login-password">Password</label>
+              <label class="field-label" for="login-password" data-i18n="login.password">Password</label>
               <input id="login-password" type="password" name="LoginPassword" autocomplete="current-password"
-                placeholder="Enter password" required />
+                data-i18n-placeholder="login.placeholder.password" placeholder="Enter password" required />
             </div>
-            <!-- <button href="/auth">Log In</button> -->
             <div>
-              <input class="button" name="LoginSubmit" type="submit" value="Login" />
+              <input class="button" name="LoginSubmit" type="submit" data-i18n-value="login.submit" value="Login" />
             </div>
           </form>
         </div>
       </div>
     </div>
   </section>
+  <script src="../static/js/i18n.js"></script>
 </body>
 
 </html>
