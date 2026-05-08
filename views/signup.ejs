@@ -14,19 +14,27 @@
   <section class="section signup-section">
     <div class="container signup-container">
       <div class="main">
-        <input type="checkbox" id="chk" aria-hidden="true" />
+        <input type="checkbox" id="chk" class="visually-hidden toggle-input" />
 
         <div class="signup">
           <form method="post" action="/signup">
-            <label for="chk" aria-hidden="true">Sign up</label>
+            <h1 class="form-title">
+              <label for="chk" class="toggle-label">Sign up</label>
+            </h1>
             <div class="signup-username">
-              <input type="text" name="SignUpUsername" placeholder="User name" required="true" />
+              <label class="field-label" for="signup-username">User name</label>
+              <input id="signup-username" type="text" name="SignUpUsername" autocomplete="username"
+                placeholder="User name" required />
             </div>
             <div class="signup-email">
-              <input type="email" name="SignUpEmail" placeholder="Email" required="true" />
+              <label class="field-label" for="signup-email">Email</label>
+              <input id="signup-email" type="email" name="SignUpEmail" autocomplete="email" placeholder="Email"
+                required />
             </div>
             <div class="signup-password">
-              <input type="password" name="SignUpPassword" placeholder="Password" required="true" />
+              <label class="field-label" for="signup-password">Password</label>
+              <input id="signup-password" type="password" name="SignUpPassword" autocomplete="new-password"
+                placeholder="Password" required />
             </div>
             <div>
               <input class="button" name="SignUpSubmit" type="submit" value="Sign up" />
@@ -35,12 +43,18 @@
         </div>
         <div class="login">
           <form method="post" action="/login">
-            <label for="chk" aria-hidden="true">Login</label>
+            <h2 class="form-title">
+              <label for="chk" class="toggle-label">Login</label>
+            </h2>
             <div class="signup-email">
-              <input type="email" name="LoginEmail" placeholder="Enter your email " required="true" />
+              <label class="field-label" for="login-email">Email</label>
+              <input id="login-email" type="email" name="LoginEmail" autocomplete="email"
+                placeholder="Enter your email" required />
             </div>
             <div class="signup-password">
-              <input type="password" name="LoginPassword" placeholder="Enter password" required="true" />
+              <label class="field-label" for="login-password">Password</label>
+              <input id="login-password" type="password" name="LoginPassword" autocomplete="current-password"
+                placeholder="Enter password" required />
             </div>
             <!-- <button href="/auth">Log In</button> -->
             <div>
@@ -52,8 +66,5 @@
     </div>
   </section>
 </body>
-
-</html>
-</head>
 
 </html>
