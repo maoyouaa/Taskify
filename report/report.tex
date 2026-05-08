@@ -193,8 +193,82 @@ The new \texttt{task-store.mjs} file keeps the storage key in one place and wrap
   \label{fig:persistence-refresh}
 \end{figure}
 
-\section{Deficiency 4 Placeholder}
-\textbf{TODO:} Insert the fourth completed deficiency. Include detection method, literature source, implementation rationale, and real before-vs-after code.
+\section{Weak User Feedback and Unclear Task Actions}
+
+\subsection{Detection}
+This issue was identified by reviewing the earlier dashboard interface and tracing the task workflow from the user perspective. The original dashboard mainly presented static task cards and did not give users a clear, interactive sequence for managing work items. Important actions such as editing a task, moving it forward in the workflow, resetting its status, or deleting it were either unavailable or not clearly expressed as direct controls. As a result, the dashboard looked like a board, but did not behave like a usable task-management tool.
+
+The feedback problem was equally visible during interaction analysis. When a user created, edited, or changed a task, there was little or no immediate confirmation explaining what had happened. This meant that users had to infer success from the layout alone rather than being explicitly informed. In a task-management interface, that is a usability problem because small state changes happen frequently and should be communicated clearly.
+
+\subsection{Literature}
+This improvement was informed by both an academic usability article and a professional UX article, each of which emphasises the importance of timely feedback and clear interaction flow. Barrington argues that usable systems should communicate system state through appropriate feedback within a reasonable time and should support navigation through clearly marked and recoverable actions \cite{barrington-usable-products}. These principles are directly relevant to a task dashboard, where users need to understand both the outcome of an action and the next available workflow step.
+
+A similar position is presented in a professional UX article published on DEV Community, which explains that interfaces should keep users informed about ongoing system changes and should make common actions understandable and reversible \cite{devto-heuristics}. Taken together, these sources provide a clear rationale for introducing visible task controls, explicit workflow transitions, and immediate confirmation messages in the dashboard.
+
+\subsection{Implementation}
+The dashboard was redesigned so that each task card exposes explicit action buttons and each important action produces visible interface feedback. The implementation was mainly completed in \texttt{static/js/dashboard.js}, supported by updates to the dashboard template and styling.
+
+Before the improvement, the dashboard section functioned mostly as a visual mockup of task columns. The interface did not provide a complete user-facing workflow with direct task actions and clear system responses.
+
+\noindent\textbf{Before improvement: static dashboard content with limited user action flow.}
+{\footnotesize
+\begin{verbatim}
+<div class="dashboard-task task-1">
+  <div class="dashboard-task-head">
+    Lorem ipsum dolor sit amet.
+  </div>
+  <div class="dashboard-task-description">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+  </div>
+</div>
+\end{verbatim}
+}
+
+After the improvement, task actions were implemented directly in JavaScript and rendered as explicit controls on each card:
+
+\noindent\textbf{After improvement: explicit task actions and visible feedback.}
+{\footnotesize
+\begin{verbatim}
+actions.append(
+  createActionButton("Edit", () => {
+    fillForm(task);
+    form.elements.title.focus();
+    showMessage("Task loaded for editing.");
+  })
+);
+
+if (task.status === "todo") {
+  actions.append(createActionButton(
+    "Start",
+    () => moveTask(task.id, "doing", "Task moved to In progress."),
+    "primary"
+  ));
+}
+\end{verbatim}
+}
+
+The implementation introduced five concrete changes to the dashboard interaction flow. First, each card now exposes clear task action buttons such as \texttt{Edit}, \texttt{Start}, \texttt{Complete}, \texttt{Reset}, and \texttt{Delete}. Second, the interface now displays visible status messages after important events, such as saving, updating, deleting, loading a task for editing, or moving it to another workflow stage. Third, the board metrics are updated live so that users can immediately observe the current number of total, active, and completed tasks. Fourth, task transitions are now explicit, making it easier to follow movement from \textit{To do} to \textit{In progress} and then to \textit{Completed}. Finally, the dashboard layout and styling were updated so that these controls appear as part of a coherent task-management workflow rather than as decorative interface elements.
+
+These changes follow the literature closely. The action buttons improve user control by making the available operations visible and predictable. The status messages and live metrics improve visibility of system status by telling the user exactly what has happened after each interaction.
+
+\subsection{Evidence}
+The improved dashboard can now demonstrate several visible feedback states for the report evidence:
+
+\begin{itemize}
+\item a success message after saving or updating a task;
+\item an edit feedback message after loading a task into the form;
+\item a status-transition message after moving a task to \textit{In progress} or \textit{Completed};
+\item updated task metrics showing the new board state after interaction.
+\end{itemize}
+
+A suitable final report screenshot should therefore show a task moving between columns together with the visible confirmation message and the updated metric counters. This demonstrates that the revised dashboard communicates interaction outcomes explicitly, rather than requiring the user to infer state changes indirectly from the layout alone.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{figures/dashboard-feedback-before-after.png}
+  \caption{Dashboard interaction evidence. Before the improvement, the selected task was still in the To do column and the interface only showed the default workspace message. After the user selected Start, the task moved to In progress, the system displayed a visible confirmation message, and the dashboard metrics updated immediately.}
+  \label{fig:dashboard-feedback-before-after}
+\end{figure}
 
 \section{Baseline Standards Evidence}
 \textbf{TODO:} Add concise evidence and screenshots for the required baseline standards: 7-day Vercel/Render uptime, Codecov/Istanbul coverage of at least 80\%, Lighthouse Accessibility score of at least 90, a two-language i18n toggle, a cookie banner, and a privacy policy page. Each screenshot must have a figure number and descriptive caption.
@@ -213,6 +287,8 @@ The completed contribution workbook is included as a separate submission artifac
 \bibitem{rfc9110} R. Fielding, M. Nottingham, and J. Reschke, ``HTTP Semantics,'' RFC 9110, Jun. 2022. [Online]. Available: \url{https://www.rfc-editor.org/rfc/rfc9110}. Accessed: May 8, 2026.
 \bibitem{mdn-web-storage} MDN Web Docs, ``Web Storage API.'' [Online]. Available: \url{https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API}. Accessed: May 8, 2026.
 \bibitem{w3c-web-storage} W3C, ``Web Storage (Second Edition).'' [Online]. Available: \url{https://www.w3.org/TR/webstorage/}. Accessed: May 8, 2026.
+\bibitem{barrington-usable-products} S. Barrington, ``Usability in the Lab: Techniques for Creating Usable Products,'' \textit{Journal of Laboratory Automation}, vol. 12, no. 1, 2007. [Online]. Available: \url{https://doi.org/10.1016/j.jala.2006.08.004}. Accessed: May 8, 2026.
+\bibitem{devto-heuristics} Lollypop Design, ``What are the 10 Principles of Usability Heuristics?,'' DEV Community, Jan. 23, 2025. [Online]. Available: \url{https://dev.to/lollypopdesign/what-are-the-10-principles-of-usability-heuristics-1nb1}. Accessed: May 8, 2026.
 \end{thebibliography}
 
 \end{document}
