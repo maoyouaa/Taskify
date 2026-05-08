@@ -134,8 +134,64 @@ The same approach was added for \texttt{POST /login}. The app now rejects invali
   \label{fig:auth-http-evidence}
 \end{figure}
 
-\section{Deficiency 3 Placeholder}
-\textbf{TODO:} Insert the third completed deficiency. Include detection method, literature source, implementation rationale, and real before-vs-after code.
+\section{Dashboard Tasks Were Lost After Refresh}
+
+\subsection{Detection}
+The third issue appeared during a refresh check on the dashboard task board. A new task could be created and shown on the board, but after refreshing the page the board went back to the three sample tasks. The saved item, \texttt{Persistence evidence task}, was gone. The cause was in \texttt{static/js/dashboard.js}: the initial task state was rebuilt from \texttt{seedTasks} every time the script loaded, and the updated task array was not written anywhere durable. Figure~\ref{fig:persistence-refresh} shows the full check: the task first exists after saving, then disappears after refresh in the old version, and finally remains after refresh in the fixed version.
+
+\subsection{Literature}
+MDN describes the Web Storage API as a browser feature for storing key-value data on the client, with \texttt{localStorage} persisting beyond a single page session \cite{mdn-web-storage}. The W3C Web Storage specification defines \texttt{getItem} and \texttt{setItem} as origin-scoped storage operations, so it was a reasonable fit for a small dashboard task list that did not yet have a database-backed task model \cite{w3c-web-storage}. The loader still needed a safe fallback, because browser storage can be empty, cleared, or contain invalid JSON. In those cases, the dashboard should return to the sample tasks instead of failing to render.
+
+\subsection{Implementation}
+The earlier dashboard always rebuilt state from the same seed data:
+
+\noindent\textbf{Before fix: dashboard state was recreated on every load.}
+{\footnotesize
+\begin{verbatim}
+let state = {
+  tasks: seedTasks.map((task) => ({ ...task })),
+};
+
+function deleteTask(taskId) {
+  state.tasks = state.tasks.filter((task) => task.id !== taskId);
+  renderBoard();
+  showMessage("Task deleted successfully.");
+}
+\end{verbatim}
+}
+
+The fix moved persistence into a small module and loaded the dashboard from \texttt{localStorage} when valid saved data exists:
+
+\noindent\textbf{After fix: state is loaded safely and saved after changes.}
+{\footnotesize
+\begin{verbatim}
+import { persistTasks, safeLoadTasks } from "./modules/task-store.mjs";
+
+let state = {
+  tasks: safeLoadTasks(window.localStorage,
+    seedTasks.map((task) => ({ ...task }))).tasks,
+};
+
+function persistState() {
+  persistTasks(window.localStorage, state.tasks);
+}
+
+function deleteTask(taskId) {
+  state.tasks = state.tasks.filter((task) => task.id !== taskId);
+  persistState();
+  renderBoard();
+}
+\end{verbatim}
+}
+
+The new \texttt{task-store.mjs} file keeps the storage key in one place and wraps \texttt{JSON.parse} in a \texttt{try}/\texttt{catch}. If saved data is missing, invalid JSON, or not an array, \texttt{safeLoadTasks} returns the fallback seed tasks instead of throwing an error. The dashboard now calls \texttt{persistState()} after save, delete, and move actions. The page script was also changed to \texttt{type="module"} so the dashboard can import the storage helper cleanly.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.96\linewidth]{figures/persistence-refresh-before-after.png}
+  \caption{Persistence refresh evidence. The first pre-fix panel shows that the task was created successfully before refresh. The second pre-fix panel shows the defect: refreshing the dashboard rebuilds the board from seed tasks, so the total returns to three and the saved task is missing. After the fix, the same refresh keeps the saved task because the board reloads the \texttt{localStorage} task list.}
+  \label{fig:persistence-refresh}
+\end{figure}
 
 \section{Deficiency 4 Placeholder}
 \textbf{TODO:} Insert the fourth completed deficiency. Include detection method, literature source, implementation rationale, and real before-vs-after code.
@@ -155,6 +211,8 @@ The completed contribution workbook is included as a separate submission artifac
 \bibitem{express-routing} Express, ``Routing.'' [Online]. Available: \url{https://expressjs.com/en/guide/routing.html}. Accessed: May 8, 2026.
 \bibitem{owasp-input-validation} OWASP Cheat Sheet Series, ``Input Validation Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html}. Accessed: May 8, 2026.
 \bibitem{rfc9110} R. Fielding, M. Nottingham, and J. Reschke, ``HTTP Semantics,'' RFC 9110, Jun. 2022. [Online]. Available: \url{https://www.rfc-editor.org/rfc/rfc9110}. Accessed: May 8, 2026.
+\bibitem{mdn-web-storage} MDN Web Docs, ``Web Storage API.'' [Online]. Available: \url{https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API}. Accessed: May 8, 2026.
+\bibitem{w3c-web-storage} W3C, ``Web Storage (Second Edition).'' [Online]. Available: \url{https://www.w3.org/TR/webstorage/}. Accessed: May 8, 2026.
 \end{thebibliography}
 
 \end{document}
