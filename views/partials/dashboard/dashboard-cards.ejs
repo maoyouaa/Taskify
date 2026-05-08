@@ -1,142 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link rel="stylesheet" href="../../../static/styles/partials/dashboard/dashboard-cards.css" />
-  <link rel="stylesheet" href="../../../static/styles/main.css">
-
-</head>
-
-<body>
-  <main>
-    <section class="dashboard-cards-section section">
-      <div class="dashboard-cards-container container">
-        <!-- <div class="dashboard-cards-container"> -->
-        <!-- dashboard container head -->
-        <div class="dashboard-head">
-          <div class="dashboard-project">Projects</div>
-
-          <!-- select menu -->
-          <div class="dashboard-select">
-            <select class="dashboard-custom-select">
-              <option value="dashboard-This Day">This Day</option>
-              <option value="dashboard-This Week">This Week</option>
-              <option value="dashboard-This Month">This Month</option>
-              <option value="dashboard-This Year">This Year</option>
-            </select>
-          </div>
+<main>
+  <section class="dashboard-cards-section section" aria-labelledby="dashboard-heading">
+    <div class="dashboard-cards-container container">
+      <div class="dashboard-head">
+        <div>
+          <p class="dashboard-kicker">Persistent task board</p>
+          <h1 id="dashboard-heading" class="dashboard-project">Projects</h1>
         </div>
-
-        <!-- dashboard cards section -->
-        <div class="dashboard-cards-container-list">
-          <!-- Card-1 -->
-          <div class="dashboard-card card-1">
-            <!-- card head -->
-            <div class="dashboard-card-head">
-              <div class="dashboard-card-topic">To do</div>
-              <div class="dashboard-task-number">0</div>
-            </div>
-            <!-- Add task option -->
-            <div class="dashboard-add-button">+</div>
-            <!-- Card body -->
-            <div class="dashboard-card-body">
-              <!-- tasks -->
-              <div class="dashboard-task task-1">
-                <div class="dashboard-task-head">
-                  Lorem ipsum dolor sit amet.
-                </div>
-                <div class="dashboard-task-description">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nulla pariatur modi quia praesentium molestias ullam.
-                </div>
-              </div>
-              <div class="dashboard-task task-2">
-                <div class="dashboard-task-head">
-                  Lorem ipsum dolor sit amet.
-                </div>
-                <div class="dashboard-task-description">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nulla pariatur modi quia praesentium molestias ullam.
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Card-2 -->
-          <div class="dashboard-card card-2">
-            <!-- card head -->
-            <div class="dashboard-card-head">
-              <div class="dashboard-card-topic">In progress</div>
-              <div class="dashboard-task-number">0</div>
-            </div>
-            <!-- Add task option -->
-            <div class="dashboard-add-button">+</div>
-            <!-- Card body -->
-            <div class="dashboard-card-body">
-              <!-- tasks -->
-              <div class="dashboard-task task-1">
-                <div class="dashboard-task-head">
-                  Lorem ipsum dolor sit amet.
-                </div>
-                <div class="dashboard-task-description">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nulla pariatur modi quia praesentium molestias ullam.
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Card-3 -->
-          <div class="dashboard-card card-3">
-            <!-- card head -->
-            <div class="dashboard-card-head">
-              <div class="dashboard-card-topic">Completed</div>
-              <div class="task-number">0</div>
-            </div>
-            <!-- Add task option -->
-            <div class="dashboard-add-button">+</div>
-            <!-- Card body -->
-            <div class="dashboard-card-body">
-              <!-- tasks -->
-              <div class="dashboard-task task-1">
-                <div class="dashboard-task-head">
-                  Lorem ipsum dolor sit amet.
-                </div>
-                <div class="dashboard-task-description">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nulla pariatur modi quia praesentium molestias ullam.
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="dashboard-card card-3">
-            
-            <div class="dashboard-card-head">
-              <div class="dashboard-card-topic">Completed</div>
-              <div class="task-number">0</div>
-            </div>
-            
-            <div class="dashboard-add-button">+</div>
-            
-            <div class="dashboard-card-body">
-              
-              <div class="dashboard-task task-1">
-                <div class="dashboard-task-head">
-                  Lorem ipsum dolor sit amet.
-                </div>
-                <div class="dashboard-task-description">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Nulla pariatur modi quia praesentium molestias ullam.
-                </div>
-              </div>
-            </div>
-          </div> -->
-        </div>
+        <p id="form-message" class="form-message" role="status" aria-live="polite">
+          Workspace ready. Saved tasks will persist after refresh.
+        </p>
       </div>
-    </section>
-  </main>
-</body>
 
-</html>
+      <div class="metric-grid" aria-label="Task metrics">
+        <article class="metric-card">
+          <span>Total tasks</span>
+          <strong id="metric-total">0</strong>
+        </article>
+        <article class="metric-card">
+          <span>In progress</span>
+          <strong id="metric-doing">0</strong>
+        </article>
+        <article class="metric-card">
+          <span>Completed</span>
+          <strong id="metric-done">0</strong>
+        </article>
+      </div>
+
+      <div class="task-workspace">
+        <aside class="task-panel" aria-labelledby="task-form-heading">
+          <p class="dashboard-kicker">Task composer</p>
+          <h2 id="task-form-heading">Add or update a task</h2>
+          <p class="task-panel-copy">
+            Titles are required, text is normalised before storage, and duplicate tasks are rejected.
+          </p>
+
+          <form id="task-form" class="task-form">
+            <input type="hidden" name="taskId" />
+
+            <label for="task-title">Task title</label>
+            <input id="task-title" name="title" type="text" maxlength="80" placeholder="Prepare refresh evidence" />
+
+            <label for="task-details">Details</label>
+            <textarea id="task-details" name="details" maxlength="240" rows="4"
+              placeholder="Summarise the defect, evidence, and expected fix."></textarea>
+
+            <div class="field-row">
+              <div>
+                <label for="task-status">Status</label>
+                <select id="task-status" name="status">
+                  <option value="todo">To do</option>
+                  <option value="doing">In progress</option>
+                  <option value="done">Completed</option>
+                </select>
+              </div>
+              <div>
+                <label for="task-priority">Priority</label>
+                <select id="task-priority" name="priority">
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div>
+                <label for="task-owner">Owner</label>
+                <input id="task-owner" name="owner" type="text" maxlength="40" placeholder="Member A" />
+              </div>
+              <div>
+                <label for="task-due">Due date</label>
+                <input id="task-due" name="dueDate" type="date" />
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button id="submit-button" class="dashboard-button dashboard-button-primary" type="submit">
+                Save task
+              </button>
+              <button id="reset-button" class="dashboard-button dashboard-button-secondary" type="button">
+                Clear form
+              </button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="board-panel" aria-label="Task board">
+          <form id="filter-form" class="filter-form" aria-label="Task filters">
+            <label for="task-search">Search tasks</label>
+            <input id="task-search" name="search" type="search" placeholder="Search title, details, or owner" />
+
+            <label for="status-filter">Status</label>
+            <select id="status-filter" name="status">
+              <option value="all">All statuses</option>
+              <option value="todo">To do</option>
+              <option value="doing">In progress</option>
+              <option value="done">Completed</option>
+            </select>
+
+            <label for="priority-filter">Priority</label>
+            <select id="priority-filter" name="priority">
+              <option value="all">All priorities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </form>
+
+          <div id="board-grid" class="board-grid"></div>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
