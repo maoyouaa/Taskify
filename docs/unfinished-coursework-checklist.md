@@ -49,8 +49,7 @@ from the repository root:
 ### You (`maoyouaa`)
 
 - Accessibility contribution is already closed with merged PR evidence.
-- Bilingual toggle contribution is still `partial` because PR `#6` is open and
-  not yet merged into `main`.
+- Bilingual toggle contribution is now closed with merged PR `#6`.
 
 ### Other group members
 
@@ -68,7 +67,6 @@ from the repository root:
 
 ## 5. Consistency tasks before final submission
 
-- Merge PR `#6`
 - update any internal docs that still refer to the i18n PR as `not opened`
 - ensure final report text matches current facts:
   - 4 group members
