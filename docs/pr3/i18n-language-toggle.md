@@ -39,13 +39,13 @@ dashboard board chrome when the language changes.
 ## Proof on GitHub
 
 - Branch: `feat/i18n-language-toggle`
-- Current GitHub-visible commit: `8cb0af7f4bf3f6259e3b93f31c10b2087f2069fb`
+- Current GitHub-visible commit: `e30258c29e7a6ccef9d306208e5fd5d33b162998`
 - Author: `maoyouaa <136690485+maoyouaa@users.noreply.github.com>`
 - Remote branch path: `origin/feat/i18n-language-toggle`
+- Open PR: `#6` - `feat: add bilingual language toggle evidence`
 
-The current branch already exists on GitHub. A formal PR from
-`feat/i18n-language-toggle` to `main` is still needed before this contribution is
-treated as fully closed.
+The current branch already exists on GitHub and now has an open PR to `main`.
+This contribution remains open until PR `#6` is merged.
 
 ## Local evidence
 
@@ -78,5 +78,5 @@ Use the contribution claim below in the final report:
 
 ## Remaining action
 
-- Open a PR from `feat/i18n-language-toggle` to `main` after these evidence files
-  are committed and pushed.
+- Merge PR `#6` into `main`, then update the contribution checklist from
+  `partial` to `complete`.

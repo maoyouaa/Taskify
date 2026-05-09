@@ -8,7 +8,7 @@ repository or GitHub-visible history, the item is marked `partial` or `missing`.
 
 | Member | GitHub identity | Real branch | Commit / PR proof | Evidence doc | Screenshot / test proof | Status | Action needed |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| You | `maoyouaa` | `feat/i18n-language-toggle` | Commit `8cb0af7`; branch exists on `origin` | `docs/pr3/i18n-language-toggle.md` | `docs/pr3/evidence/` + `verification-tests.txt` | `partial` | Open and merge the PR from `feat/i18n-language-toggle` to `main` after commit/push |
+| You | `maoyouaa` | `feat/i18n-language-toggle` | Commit `e30258c`; open PR `#6` | `docs/pr3/i18n-language-toggle.md` | `docs/pr3/evidence/` + `verification-tests.txt` | `partial` | Merge PR `#6` into `main` |
 | You | `maoyouaa` | `fix/a11y-auth-form-focus` | Commit `d5deba5`; merged as PR `#1` | `docs/pr1/form-labels.md` | `docs/pr1/evidence/signup-labels-before-after.png` | `complete` | None |
 | Member 2 | `peterlololsss` | `fix/auth-form-post-routes` | Commit `b9edfd2`; merged as PR `#5` | `docs/pr2/auth-post-routes.md` | `docs/pr2/evidence/auth-post-route-curl.txt` | `complete` | Confirm this GitHub identity matches the correct teammate name in the report |
 | Member 3 | `Min0Nclm` | `fix/user-feedback-task-actions` | Commit `a4d8356`; merged as PR `#4` | Not found in current `docs/` | Not found in current `docs/` | `partial` | Ask for a short technical note plus screenshot/test proof tied to PR `#4` |

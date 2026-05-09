@@ -8,10 +8,11 @@ history or local evidence files are listed here.
 
 - Status: `partial`
 - Main branch: `feat/i18n-language-toggle`
-- Main commit: `8cb0af7`
+- Main commit: `e30258c`
+- PR evidence: `#6` (`feat: add bilingual language toggle evidence`)
 - Evidence pack: `docs/pr3/i18n-language-toggle.md`
-- Why partial: the branch exists on GitHub, but the PR to `main` has not been
-  opened yet in the current repository state
+- Why partial: the branch and PR both exist on GitHub, but PR `#6` has not been
+  merged into `main` yet
 
 ## Contribution 2: auth form accessibility improvement
 
@@ -33,4 +34,4 @@ If two personal contributions can be reported, list them in this order:
 2. bilingual language toggle
 
 That ordering keeps the strongest already-merged evidence first while the i18n
-branch is waiting for its PR.
+branch is waiting for PR `#6` to merge.
