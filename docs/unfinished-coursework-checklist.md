@@ -6,10 +6,8 @@ the current GitHub-visible evidence.
 
 ## 1. Report body gaps
 
-- Only `docs/pr1`, `docs/pr2`, and `docs/pr3` currently exist as research-led
-  deficiency evidence packs.
-- The brief requires **4 specific deficiencies**, so **1 full D-L-I deficiency
-  pack is still missing**.
+- `docs/pr1`, `docs/pr2`, `docs/pr3`, and `docs/pr4` now exist as deficiency
+  evidence packs, but they still need to be assembled into the final report.
 - `report.pdf` is missing from the repository root, so the final report has not
   been finalized for submission.
 - Section 8 still needs at least **4 IEEE-style references** in the final report.
@@ -19,20 +17,19 @@ the current GitHub-visible evidence.
 ### Clearly evidenced now
 
 - Internationalization (i18n): implemented and evidenced in `docs/pr3/evidence/`
+- Test coverage `>= 80%`: current `npm run coverage` report shows `90.78%`
+  statements and `86.66%` branches
+- Lighthouse accessibility `>= 90`: current homepage audit is captured in
+  `docs/baseline/evidence/lighthouse-report.report.json` and
+  `docs/baseline/evidence/lighthouse-accessibility-score.png` with score `100`
+- Legal compliance: cookie banner and privacy policy page are implemented and
+  evidenced in `docs/baseline/evidence/`
 
 ### Still missing or not yet proven in the current repository
 
 - Live uptime for **7+ consecutive days**
   - missing `live-url.txt`
   - missing deployment evidence screenshot/log
-- Test coverage **>= 80%**
-  - current repository has passing tests, but no current Codecov/Istanbul proof
-- Lighthouse accessibility **>= 90**
-  - current repository has accessibility-related fixes, but no current Lighthouse
-    screenshot in the official docs set
-- Legal compliance
-  - no current cookie banner implementation/evidence found
-  - no current privacy policy page/evidence found
 
 ## 3. Required submission files still missing
 
@@ -40,7 +37,6 @@ The coursework ZIP must include four root deliverables. These are still missing
 from the repository root:
 
 - `report.pdf`
-- `github-url.txt`
 - `live-url.txt`
 - `individual-contribution.xlsx`
 
@@ -49,8 +45,7 @@ from the repository root:
 ### You (`maoyouaa`)
 
 - Accessibility contribution is already closed with merged PR evidence.
-- Bilingual toggle contribution is still `partial` because PR `#6` is open and
-  not yet merged into `main`.
+- Bilingual toggle contribution is now closed with merged PR `#6`.
 
 ### Other group members
 
@@ -62,13 +57,11 @@ from the repository root:
   - missing coursework-style technical note
   - missing screenshot or test-proof evidence
 - `juiSeIn`
-  - branch/commit/PR exist
-  - missing coursework-style technical note
-  - missing screenshot or test-proof evidence
+  - persistence deficiency note and screenshot evidence now exist
+  - still need to confirm the real teammate name mapped to this GitHub identity
 
 ## 5. Consistency tasks before final submission
 
-- Merge PR `#6`
 - update any internal docs that still refer to the i18n PR as `not opened`
 - ensure final report text matches current facts:
   - 4 group members

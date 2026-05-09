@@ -100,6 +100,8 @@ test("home page renders the language toggle script", async () => {
     assert.match(body, /data-lang-value="en"/);
     assert.match(body, /data-lang-value="zh"/);
     assert.match(body, /static\/js\/i18n\.js/);
+    assert.match(body, /id="cookie-banner"/);
+    assert.match(body, /type="module" src="\/static\/js\/site\.js"/);
   } finally {
     server.close();
   }
@@ -132,6 +134,23 @@ test("dashboard page renders with the i18n script and task board shell", async (
     assert.match(body, /data-i18n-document-title="document\.dashboard"/);
     assert.match(body, /id="board-grid"/);
     assert.match(body, /static\/js\/i18n\.js/);
+    assert.match(body, /id="cookie-banner"/);
+  } finally {
+    server.close();
+  }
+});
+
+test("privacy page renders the dedicated policy content", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/privacy");
+    const body = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.match(body, /data-i18n="privacy\.title"/);
+    assert.match(body, /data-i18n="privacy\.collectTitle"/);
+    assert.match(body, /href="\/privacy"/);
   } finally {
     server.close();
   }
