@@ -42,10 +42,10 @@ dashboard board chrome when the language changes.
 - Current GitHub-visible commit: `e30258c29e7a6ccef9d306208e5fd5d33b162998`
 - Author: `maoyouaa <136690485+maoyouaa@users.noreply.github.com>`
 - Remote branch path: `origin/feat/i18n-language-toggle`
-- Open PR: `#6` - `feat: add bilingual language toggle evidence`
+- Merged PR: `#6` - `feat: add bilingual language toggle evidence`
+- Merge commit on `main`: `c0a8b44f807eaa955a6ad999bcfa961556fce876`
 
-The current branch already exists on GitHub and now has an open PR to `main`.
-This contribution remains open until PR `#6` is merged.
+The branch contribution is now merged into `main` through PR `#6`.
 
 ## Local evidence
 
@@ -78,5 +78,5 @@ Use the contribution claim below in the final report:
 
 ## Remaining action
 
-- Merge PR `#6` into `main`, then update the contribution checklist from
-  `partial` to `complete`.
+- None for this contribution line. It is now safe to cite as a merged personal
+  contribution in the final report.
