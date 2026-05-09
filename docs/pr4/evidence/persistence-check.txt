@@ -1,0 +1,5 @@
+Storage key: taskify.dashboard.tasks
+Injected task count: 1
+Task cards after reload: 1
+First rendered task title after reload: Persist after refresh
+Stored payload after reload: [{"id":"evidence-task","title":"Persist after refresh","details":"This task should still be visible after the page reloads.","status":"doing","priority":"high","owner":"Member D","dueDate":"2026-05-11"}]

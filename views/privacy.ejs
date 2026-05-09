@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <link rel="stylesheet" href="../static/styles/main.css" />
+  <link rel="stylesheet" href="../static/styles/partials/nav.css" />
+  <link rel="stylesheet" href="../static/styles/partials/footer.css" />
+  <title data-i18n-document-title="document.home">Taskify</title>
+</head>
+
+<body>
+  <%-include("../views/partials/nav.ejs") %>
+  <main class="policy-page">
+    <section class="policy-section-shell">
+      <article class="container policy-card" aria-labelledby="policy-title">
+        <p class="policy-eyebrow" data-i18n="privacy.eyebrow">Privacy policy</p>
+        <h1 id="policy-title" class="policy-title" data-i18n="privacy.title">How Taskify handles local data.</h1>
+        <p class="policy-subtitle" data-i18n="privacy.subtitle">
+          This coursework deployment keeps planning data on the current device and uses a small consent cookie to
+          remember your banner choice.
+        </p>
+
+        <section class="policy-block">
+          <h2 data-i18n="privacy.collectTitle">1. What we collect</h2>
+          <p data-i18n="privacy.collectBody">
+            Task titles, optional task details, priority, due date, language preference, and consent choice are stored
+            in your browser. No analytics or third-party advertising scripts are enabled in this coursework build.
+          </p>
+        </section>
+
+        <section class="policy-block">
+          <h2 data-i18n="privacy.useTitle">2. How we use it</h2>
+          <p data-i18n="privacy.useBody">
+            Data is used to restore your board after refresh, keep the interface language consistent, and avoid
+            showing the cookie banner on every visit once you choose an option.
+          </p>
+        </section>
+
+        <section class="policy-block">
+          <h2 data-i18n="privacy.cookieTitle">3. Cookie choices</h2>
+          <p data-i18n="privacy.cookieBody">
+            You can choose necessary only, reject optional cookies, or accept all. Because no optional tracking is
+            bundled here, the difference is mainly whether we remember consent through the cookie banner.
+          </p>
+        </section>
+
+        <section class="policy-block">
+          <h2 data-i18n="privacy.contactTitle">4. Contact</h2>
+          <p data-i18n="privacy.contactBody">
+            For coursework review, contact the student team through the repository and include screenshots of the issue
+            you observed.
+          </p>
+        </section>
+      </article>
+    </section>
+  </main>
+  <%-include("../views/partials/footer.ejs") %>
+  <%-include("../views/partials/cookie-banner.ejs") %>
+  <script src="../static/js/i18n.js"></script>
+  <script type="module" src="/static/js/site.js"></script>
+</body>
+
+</html>

@@ -36,6 +36,10 @@ app.get("/signup", (req, res) => {
     res.status(200).render("signup.ejs");
 });
 
+app.get("/privacy", (req, res) => {
+    res.status(200).render("privacy.ejs");
+});
+
 app.post("/signup", (req, res) => {
     const missingFields = collectMissingFields(req.body, [
         "SignUpUsername",
