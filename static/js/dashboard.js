@@ -7,29 +7,29 @@ function t(key) {
 const seedTasks = [
   {
     id: "task-1",
-    title: "Review landing page copy",
-    details: "Tighten the first-screen message before the internal demo.",
+    titleKey: "seed.task1.title",
+    detailsKey: "seed.task1.details",
     status: "todo",
     priority: "high",
-    owner: "Member A",
+    ownerKey: "seed.task1.owner",
     dueDate: "2026-05-12",
   },
   {
     id: "task-2",
-    title: "Prepare sprint check-in",
-    details: "Summarize blockers and current progress for the team update.",
+    titleKey: "seed.task2.title",
+    detailsKey: "seed.task2.details",
     status: "doing",
     priority: "medium",
-    owner: "Member C",
+    ownerKey: "seed.task2.owner",
     dueDate: "2026-05-10",
   },
   {
     id: "task-3",
-    title: "Archive resolved bug list",
-    details: "Move last week's completed fixes into the release notes.",
+    titleKey: "seed.task3.title",
+    detailsKey: "seed.task3.details",
     status: "done",
     priority: "low",
-    owner: "Member B",
+    ownerKey: "seed.task3.owner",
     dueDate: "",
   },
 ];
@@ -49,6 +49,22 @@ let state = {
   tasks: safeLoadTasks(window.localStorage, seedTasks.map((task) => ({ ...task }))).tasks,
 };
 
+function getTaskTitle(task) {
+  return task.titleKey ? t(task.titleKey) : task.title;
+}
+
+function getTaskDetails(task) {
+  if (task.detailsKey) {
+    return t(task.detailsKey);
+  }
+
+  return task.details || t("dashboard.noDetails");
+}
+
+function getTaskOwner(task) {
+  return task.ownerKey ? t(task.ownerKey) : task.owner;
+}
+
 function showMessage(text, tone = "neutral") {
   message.textContent = text;
   message.classList.toggle("is-error", tone === "error");
@@ -64,11 +80,11 @@ function resetForm() {
 
 function fillForm(task) {
   form.elements.taskId.value = task.id;
-  form.elements.title.value = task.title;
-  form.elements.details.value = task.details;
+  form.elements.title.value = getTaskTitle(task);
+  form.elements.details.value = task.detailsKey ? t(task.detailsKey) : task.details;
   form.elements.status.value = task.status;
   form.elements.priority.value = task.priority;
-  form.elements.owner.value = task.owner;
+  form.elements.owner.value = getTaskOwner(task) || "";
   form.elements.dueDate.value = task.dueDate;
   submitButton.textContent = t("dashboard.updateTask");
 }
@@ -139,7 +155,7 @@ function renderTask(task) {
   header.className = "task-card-header";
 
   const title = document.createElement("h3");
-  title.textContent = task.title;
+  title.textContent = getTaskTitle(task);
 
   const priority = document.createElement("span");
   priority.className = `priority-chip priority-${task.priority}`;
@@ -148,14 +164,15 @@ function renderTask(task) {
   header.append(title, priority);
 
   const details = document.createElement("p");
-  details.textContent = task.details || t("dashboard.noDetails");
+  details.textContent = getTaskDetails(task);
 
   const meta = document.createElement("div");
   meta.className = "task-meta";
 
-  if (task.owner) {
+  const ownerText = getTaskOwner(task);
+  if (ownerText) {
     const owner = document.createElement("span");
-    owner.textContent = `${t("dashboard.owner")}: ${task.owner}`;
+    owner.textContent = `${t("dashboard.owner")}: ${ownerText}`;
     meta.appendChild(owner);
   }
 
@@ -195,6 +212,12 @@ function renderTask(task) {
 }
 
 function renderBoard() {
+  const labels = {
+    todo: t("dashboard.todo"),
+    doing: t("dashboard.doing"),
+    done: t("dashboard.done"),
+  };
+
   const grouped = {
     todo: state.tasks.filter((task) => task.status === "todo"),
     doing: state.tasks.filter((task) => task.status === "doing"),

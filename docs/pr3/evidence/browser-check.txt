@@ -1,0 +1,7 @@
+Flow under test: / -> language toggle -> translated content visible
+Flow under test: /signup -> persisted zh language -> translated auth labels visible
+Flow under test: /dashboard -> persisted zh language -> translated dashboard chrome visible
+HTML lang verified during headless browser capture: zh-CN
+Dashboard capture confirmed the localized page title and translated UI chrome
+Signup screenshot regenerated after the width overflow fix; inputs no longer extend past the card
+Screenshots captured: home-en.png, home-zh.png, signup-zh.png, dashboard-zh.png

@@ -1,5 +1,6 @@
 (() => {
   const STORAGE_KEY = "taskify.language";
+  const fallbackLanguage = "en";
   const translations = {
     en: {
       "document.home": "Taskify",
@@ -7,6 +8,8 @@
       "document.dashboard": "Dashboard",
       "lang.en": "EN",
       "lang.zh": "中文",
+      "lang.switcher": "Language switcher",
+      "auth.mode": "Authentication mode",
       "nav.features": "Features",
       "nav.templates": "Templates",
       "nav.forTeams": "For Teams",
@@ -71,12 +74,14 @@
       "signup.placeholder.email": "Email",
       "signup.placeholder.password": "Password",
       "signup.submit": "Sign up",
+      "signup.copy": "Create an account to organize work, study, and personal tasks in one place.",
       "login.title": "Login",
       "login.email": "Email",
       "login.password": "Password",
       "login.placeholder.email": "Enter your email",
       "login.placeholder.password": "Enter password",
       "login.submit": "Login",
+      "login.copy": "Welcome back. Pick your language, sign in, and continue from the latest task board state.",
       "dashboard.search": "Search",
       "dashboard.overview": "Overview",
       "dashboard.stats": "Stats",
@@ -132,7 +137,18 @@
       "dashboard.taskMovedTodo": "Task returned to To do.",
       "dashboard.formInvalid": "Please complete the required task fields before saving.",
       "dashboard.formCleared": "Form cleared.",
-      "dashboard.emptyState": "No tasks in this stage yet."
+      "dashboard.emptyState": "No tasks in this stage yet.",
+      "dashboard.boardLabel": "Task board",
+      "dashboard.metricsLabel": "Task metrics",
+      "seed.task1.title": "Review landing page copy",
+      "seed.task1.details": "Tighten the first-screen message before the internal demo.",
+      "seed.task1.owner": "Member A",
+      "seed.task2.title": "Prepare sprint check-in",
+      "seed.task2.details": "Summarize blockers and current progress for the team update.",
+      "seed.task2.owner": "Member C",
+      "seed.task3.title": "Archive resolved bug list",
+      "seed.task3.details": "Move last week's completed fixes into the release notes.",
+      "seed.task3.owner": "Member B"
     },
     zh: {
       "document.home": "Taskify",
@@ -140,6 +156,8 @@
       "document.dashboard": "仪表盘",
       "lang.en": "EN",
       "lang.zh": "中文",
+      "lang.switcher": "语言切换",
+      "auth.mode": "认证模式",
       "nav.features": "功能",
       "nav.templates": "模板",
       "nav.forTeams": "团队方案",
@@ -160,7 +178,7 @@
       "feature.card2.cta": "查看全部功能",
       "feature.card3.title": "建立更稳的习惯",
       "feature.card3.text": "用轻量规划保持专注，让效率提升更自然。",
-      "feature.card3.cta": "开始测试",
+      "feature.card3.cta": "开始测评",
       "feature.card4.title": "从模板快速起步",
       "feature.card4.text": "直接套用适合团队协作、学习计划和个人目标的任务布局。",
       "feature.card4.cta": "使用模板",
@@ -173,7 +191,7 @@
       "achievements.stat2": "完成任务数",
       "achievements.stat3": "合作院校",
       "achievements.stat4": "专业版用户",
-      "footer.tagline": "加入数百万用户，一起用 Taskify 管理工作与生活。",
+      "footer.tagline": "加入数百万人，一起用 Taskify 管理工作与生活。",
       "footer.features": "功能",
       "footer.resources": "资源",
       "footer.company": "公司",
@@ -204,12 +222,14 @@
       "signup.placeholder.email": "邮箱",
       "signup.placeholder.password": "密码",
       "signup.submit": "注册",
+      "signup.copy": "创建账户，在一个地方整理工作、学习和个人任务。",
       "login.title": "登录",
       "login.email": "邮箱",
       "login.password": "密码",
       "login.placeholder.email": "输入你的邮箱",
       "login.placeholder.password": "输入密码",
       "login.submit": "登录",
+      "login.copy": "欢迎回来。选择语言后登录，继续处理最新的任务看板。",
       "dashboard.search": "搜索",
       "dashboard.overview": "概览",
       "dashboard.stats": "统计",
@@ -219,7 +239,7 @@
       "dashboard.settings": "设置",
       "dashboard.profile": "个人资料",
       "dashboard.logout": "退出登录",
-      "dashboard.user": "伏地魔大人",
+      "dashboard.user": "Lord Voldemort",
       "dashboard.kicker": "任务看板",
       "dashboard.projects": "项目",
       "dashboard.copy": "每次任务更新都能获得清晰反馈与即时状态变化。",
@@ -265,14 +285,25 @@
       "dashboard.taskMovedTodo": "任务已返回待处理。",
       "dashboard.formInvalid": "请先完成必填任务字段再保存。",
       "dashboard.formCleared": "表单已清空。",
-      "dashboard.emptyState": "这个阶段还没有任务。"
+      "dashboard.emptyState": "这个阶段还没有任务。",
+      "dashboard.boardLabel": "任务看板",
+      "dashboard.metricsLabel": "任务指标",
+      "seed.task1.title": "检查首页文案",
+      "seed.task1.details": "在内部演示前收紧首屏信息表达。",
+      "seed.task1.owner": "成员 A",
+      "seed.task2.title": "准备冲刺同步",
+      "seed.task2.details": "汇总阻塞项和当前进度，便于团队更新。",
+      "seed.task2.owner": "成员 C",
+      "seed.task3.title": "归档已解决的缺陷清单",
+      "seed.task3.details": "把上周已完成的修复移动到发布说明中。",
+      "seed.task3.owner": "成员 B"
     }
   };
 
-  let currentLanguage = localStorage.getItem(STORAGE_KEY) || "en";
+  let currentLanguage = localStorage.getItem(STORAGE_KEY) || fallbackLanguage;
 
   function t(key) {
-    return translations[currentLanguage][key] || translations.en[key] || key;
+    return translations[currentLanguage]?.[key] || translations[fallbackLanguage]?.[key] || key;
   }
 
   function updateToggleButtons() {
@@ -311,7 +342,7 @@
   }
 
   function setLanguage(language) {
-    currentLanguage = language === "zh" ? "zh" : "en";
+    currentLanguage = language === "zh" ? "zh" : fallbackLanguage;
     localStorage.setItem(STORAGE_KEY, currentLanguage);
     applyTranslations();
     window.dispatchEvent(new CustomEvent("taskify:languagechange", { detail: { language: currentLanguage } }));
@@ -330,7 +361,7 @@
     applyTranslations,
     getLanguage: () => currentLanguage,
     setLanguage,
-    t,
+    t
   };
 
   applyTranslations();
