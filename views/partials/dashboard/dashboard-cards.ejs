@@ -3,90 +3,93 @@
     <div class="dashboard-cards-container container">
       <div class="dashboard-head">
         <div>
-          <p class="dashboard-kicker">Task board</p>
-          <h1 id="dashboard-heading" class="dashboard-project">Projects</h1>
-          <p class="dashboard-copy">Clear actions and instant feedback for every task update.</p>
+          <p class="dashboard-kicker" data-i18n="dashboard.kicker">Task board</p>
+          <h1 id="dashboard-heading" class="dashboard-project" data-i18n="dashboard.projects">Projects</h1>
+          <p class="dashboard-copy" data-i18n="dashboard.copy">Clear actions and instant feedback for every task update.</p>
         </div>
-        <p id="form-message" class="form-message" role="status" aria-live="polite">
+        <p id="form-message" class="form-message" role="status" aria-live="polite" data-i18n="dashboard.workspaceReady">
           Workspace ready. Task actions update the board instantly.
         </p>
       </div>
 
-      <div class="metric-grid" aria-label="Task metrics">
+      <div class="metric-grid" data-i18n-aria-label="dashboard.metricsLabel" aria-label="Task metrics">
         <article class="metric-card">
-          <span>Total tasks</span>
+          <span data-i18n="dashboard.totalTasks">Total tasks</span>
           <strong id="metric-total">0</strong>
         </article>
         <article class="metric-card">
-          <span>In progress</span>
+          <span data-i18n="dashboard.inProgress">In progress</span>
           <strong id="metric-doing">0</strong>
         </article>
         <article class="metric-card">
-          <span>Completed</span>
+          <span data-i18n="dashboard.completed">Completed</span>
           <strong id="metric-done">0</strong>
         </article>
       </div>
 
       <div class="task-workspace">
         <aside class="task-panel" aria-labelledby="task-form-heading">
-          <p class="dashboard-kicker">Task composer</p>
-          <h2 id="task-form-heading">Add or update a task</h2>
-          <p class="task-panel-copy">
+          <p class="dashboard-kicker" data-i18n="dashboard.composer">Task composer</p>
+          <h2 id="task-form-heading" data-i18n="dashboard.formTitle">Add or update a task</h2>
+          <p class="task-panel-copy" data-i18n="dashboard.formCopy">
             Use the form to create a task, then move it forward with visible action buttons.
           </p>
 
           <form id="task-form" class="task-form">
             <input type="hidden" name="taskId" />
 
-            <label for="task-title">Task title</label>
-            <input id="task-title" name="title" type="text" maxlength="80" required placeholder="Prepare release notes" />
+            <label for="task-title" data-i18n="dashboard.taskTitle">Task title</label>
+            <input id="task-title" name="title" type="text" maxlength="80" required
+              data-i18n-placeholder="dashboard.taskTitlePlaceholder" placeholder="Prepare release notes" />
 
-            <label for="task-details">Details</label>
+            <label for="task-details" data-i18n="dashboard.details">Details</label>
             <textarea id="task-details" name="details" maxlength="240" rows="4"
+              data-i18n-placeholder="dashboard.detailsPlaceholder"
               placeholder="Add a short note about what needs to happen next."></textarea>
 
             <div class="field-row">
               <div>
-                <label for="task-status">Status</label>
+                <label for="task-status" data-i18n="dashboard.status">Status</label>
                 <select id="task-status" name="status">
-                  <option value="todo">To do</option>
-                  <option value="doing">In progress</option>
-                  <option value="done">Completed</option>
+                  <option value="todo" data-i18n="dashboard.todo">To do</option>
+                  <option value="doing" data-i18n="dashboard.doing">In progress</option>
+                  <option value="done" data-i18n="dashboard.done">Completed</option>
                 </select>
               </div>
               <div>
-                <label for="task-priority">Priority</label>
+                <label for="task-priority" data-i18n="dashboard.priority">Priority</label>
                 <select id="task-priority" name="priority">
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
+                  <option value="high" data-i18n="dashboard.priority.high">High</option>
+                  <option value="medium" data-i18n="dashboard.priority.medium">Medium</option>
+                  <option value="low" data-i18n="dashboard.priority.low">Low</option>
                 </select>
               </div>
             </div>
 
             <div class="field-row">
               <div>
-                <label for="task-owner">Owner</label>
-                <input id="task-owner" name="owner" type="text" maxlength="40" placeholder="Member C" />
+                <label for="task-owner" data-i18n="dashboard.ownerField">Owner</label>
+                <input id="task-owner" name="owner" type="text" maxlength="40"
+                  data-i18n-placeholder="dashboard.ownerPlaceholder" placeholder="Member C" />
               </div>
               <div>
-                <label for="task-due">Due date</label>
+                <label for="task-due" data-i18n="dashboard.dueDate">Due date</label>
                 <input id="task-due" name="dueDate" type="date" />
               </div>
             </div>
 
             <div class="button-row">
-              <button id="submit-button" class="dashboard-button dashboard-button-primary" type="submit">
+              <button id="submit-button" class="dashboard-button dashboard-button-primary" type="submit" data-i18n="dashboard.saveTask">
                 Save task
               </button>
-              <button id="reset-button" class="dashboard-button dashboard-button-secondary" type="button">
+              <button id="reset-button" class="dashboard-button dashboard-button-secondary" type="button" data-i18n="dashboard.clearForm">
                 Clear form
               </button>
             </div>
           </form>
         </aside>
 
-        <section class="board-panel" aria-label="Task board">
+        <section class="board-panel" data-i18n-aria-label="dashboard.boardLabel" aria-label="Task board">
           <div id="board-grid" class="board-grid"></div>
         </section>
       </div>

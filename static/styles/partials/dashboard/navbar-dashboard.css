@@ -22,6 +22,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .dashboard-navbar-dashboard-navbar-links li {
@@ -113,5 +114,9 @@
   background:transparent;
   font-size:25px;
   width: 45px;
+}
+
+.dashboard-lang-switch {
+  margin-left: 8px;
 }
 
