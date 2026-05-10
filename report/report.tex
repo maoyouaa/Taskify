@@ -271,10 +271,17 @@ A suitable final report screenshot should therefore show a task moving between c
 \end{figure}
 
 \section{Baseline Standards Evidence}
-\textbf{TODO:} Add concise evidence and screenshots for the required baseline standards: 7-day Vercel/Render uptime, Codecov/Istanbul coverage of at least 80\%, Lighthouse Accessibility score of at least 90, a two-language i18n toggle, a cookie banner, and a privacy policy page. Each screenshot must have a figure number and descriptive caption.
+Baseline evidence is partly complete. The public deployment URL is recorded in \texttt{live-url.txt}, and the repository URL is recorded in \texttt{github-url.txt}. Current evidence shows 90.78\% statement coverage, Lighthouse Accessibility 100 in the stored report and 96 in a live Chrome DevTools MCP audit, a working English/Chinese language toggle, a cookie consent banner, and a privacy policy page. However, the uptime log starts on 9 May 2026, so the 7-day uptime standard cannot honestly be claimed until 16 May 2026. Figure~\ref{fig:baseline-standards} presents cropped screenshot evidence for the completed baseline items; the uptime evidence must be added after the 7-day window is complete.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{figures/baseline-standards-evidence.png}
+  \caption{Baseline standards screenshot evidence. The figure shows cropped evidence from the Istanbul coverage report, Lighthouse accessibility report, translated Chinese UI, and cookie consent banner. Privacy-page evidence is stored separately in \texttt{docs/baseline/evidence/privacy-page.png}; 7-day uptime evidence remains pending until 16 May 2026.}
+  \label{fig:baseline-standards}
+\end{figure}
 
 \section{Individual Contribution Forms}
-The completed contribution workbook is included as a separate submission artifact: \texttt{individual-contribution.xlsx}. This file is excluded from the report word count and is the place where individual contribution evidence and pull-request links are recorded.
+\textbf{TODO:} Insert the PDF-exported version of the completed individual contribution form here. Keep the original Excel workbook as a separate file in the final submission archive: \texttt{individual-contribution.xlsx}. This section is excluded from the report word count.
 
 \section{References}
 \renewcommand{\refname}{}
