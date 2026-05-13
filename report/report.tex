@@ -31,7 +31,7 @@
 \makeatother
 
 \title{CPT304 Coursework 1 Report\\Taskify Research-Led Software Enhancement}
-\author{Group XX}
+\author{Group 13}
 \date{May 2026}
 
 \begin{document}
@@ -85,7 +85,7 @@ The same pattern was applied to the username, password, login email, and login p
 The next issue came from following the same forms through to the backend. In \texttt{views/signup.ejs}, the sign-up form submitted \texttt{POST /signup} and the login form submitted \texttt{POST /login}. In the earlier \texttt{src/app.js}, Express only defined \texttt{GET /}, \texttt{GET /signup}, and \texttt{GET /dashboard}. A direct curl check confirmed the bug: a valid \texttt{POST /signup} returned \texttt{HTTP/1.1 404 Not Found}. In practice, a user could fill the form correctly and still be sent to a missing route.
 
 \subsection{Literature}
-Express routing is matched by both HTTP method and path, so \texttt{GET /signup} does not handle \texttt{POST /signup} \cite{express-routing}. OWASP's Input Validation Cheat Sheet was used because direct POST requests can bypass browser validation, so required fields and email format still need server-side checks \cite{owasp-input-validation}. RFC 9110 was used for the success path: \texttt{303 See Other} redirects the user agent to a different resource identified by the \texttt{Location} header, which fits a Post/Redirect/Get flow to \texttt{/dashboard} \cite{rfc9110}.
+Express routing is matched by both HTTP method and path, so \texttt{GET /signup} does not handle \texttt{POST /signup} \cite{express-routing}. OWASP's Input Validation Cheat Sheet was used because direct POST requests can bypass browser validation, so required fields and email format still need server-side checks \cite{owasp-input-validation}. For the follow-up hardening, OWASP's authentication and session guidance informed password hashing, safe comparison, and protected session cookies \cite{owasp-authentication,owasp-session-management}. RFC 9110 was used for the success path: \texttt{303 See Other} redirects the user agent to a different resource identified by the \texttt{Location} header, which fits a Post/Redirect/Get flow to \texttt{/dashboard} \cite{rfc9110}.
 
 \subsection{Implementation}
 The earlier backend rendered the sign-up page but did not process its submission:
@@ -125,7 +125,7 @@ app.post("/signup", (req, res) => {
 \end{verbatim}
 }
 
-The same approach was added for \texttt{POST /login}. The app now rejects invalid email input with \texttt{400 Bad Request} and redirects valid submissions with \texttt{303 See Other}. To make this testable, \texttt{src/app.js} exports the Express app and only starts \texttt{listen()} when run directly, so \texttt{node --test} can run the route checks on a temporary port.
+The same approach was added for \texttt{POST /login}. A follow-up backend PR then closed the remaining authentication gap: sign-up now stores a \texttt{scrypt}-hashed demo account, login rejects unknown or wrong credentials with \texttt{401 Unauthorized}, and \texttt{/dashboard} requires a signed \texttt{HttpOnly}, \texttt{SameSite=Lax} session cookie. The store is still intentionally in-memory for the coursework prototype, but the backend no longer treats any valid-looking email/password pair as authenticated. To make this testable, \texttt{src/app.js} exports the Express app and only starts \texttt{listen()} when run directly, so \texttt{node --test} can run the route checks on a temporary port.
 
 \begin{figure}[H]
   \centering
@@ -291,6 +291,8 @@ Baseline evidence is partly complete. The public deployment URL is recorded in \
 \bibitem{w3c-h44} W3C Web Accessibility Initiative, ``H44: Using label elements to associate text labels with form controls.'' [Online]. Available: \url{https://www.w3.org/WAI/WCAG22/Techniques/html/H44}. Accessed: May 8, 2026.
 \bibitem{express-routing} Express, ``Routing.'' [Online]. Available: \url{https://expressjs.com/en/guide/routing.html}. Accessed: May 8, 2026.
 \bibitem{owasp-input-validation} OWASP Cheat Sheet Series, ``Input Validation Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html}. Accessed: May 8, 2026.
+\bibitem{owasp-authentication} OWASP Cheat Sheet Series, ``Authentication Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html}. Accessed: May 14, 2026.
+\bibitem{owasp-session-management} OWASP Cheat Sheet Series, ``Session Management Cheat Sheet.'' [Online]. Available: \url{https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html}. Accessed: May 14, 2026.
 \bibitem{rfc9110} R. Fielding, M. Nottingham, and J. Reschke, ``HTTP Semantics,'' RFC 9110, Jun. 2022. [Online]. Available: \url{https://www.rfc-editor.org/rfc/rfc9110}. Accessed: May 8, 2026.
 \bibitem{mdn-web-storage} MDN Web Docs, ``Web Storage API.'' [Online]. Available: \url{https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API}. Accessed: May 8, 2026.
 \bibitem{w3c-web-storage} W3C, ``Web Storage (Second Edition).'' [Online]. Available: \url{https://www.w3.org/TR/webstorage/}. Accessed: May 8, 2026.
