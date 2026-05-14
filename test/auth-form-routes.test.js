@@ -191,6 +191,41 @@ test("signup form submission rejects duplicate email addresses", async () => {
   }
 });
 
+test("concurrent signup attempts reserve duplicate email addresses", async () => {
+  const server = await listen(app);
+  const email = nextEmail("parallel-duplicate");
+  const body = () =>
+    new URLSearchParams({
+      SignUpUsername: "Alex",
+      SignUpEmail: email,
+      SignUpPassword: "password123",
+    });
+
+  try {
+    const responses = await Promise.all([
+      request(server, "/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body(),
+      }),
+      request(server, "/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body(),
+      }),
+    ]);
+    const statuses = responses.map((response) => response.status).sort();
+
+    assert.deepEqual(statuses, [303, 409]);
+  } finally {
+    await close(server);
+  }
+});
+
 test("auth form submissions reject invalid email input", async () => {
   const server = await listen(app);
 
@@ -271,6 +306,73 @@ test("dashboard rejects tampered session cookies", async () => {
   }
 });
 
+test("dashboard treats malformed cookie encoding as unauthenticated", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: `${SESSION_COOKIE}=%`,
+      },
+    });
+
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard accepts a signed session without process-local user state", async () => {
+  const server = await listen(app);
+
+  try {
+    const cookie = await signup(server, { email: nextEmail("stateless-session") });
+    clearUsersForTests();
+
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    const body = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.match(body, /id="board-grid"/);
+  } finally {
+    await close(server);
+  }
+});
+
+test("logout clears the browser cookie and revokes the current session", async () => {
+  const server = await listen(app);
+
+  try {
+    const cookie = await signup(server, { email: nextEmail("logout") });
+    const logoutResponse = await request(server, "/logout", {
+      method: "POST",
+      headers: {
+        Cookie: cookie,
+      },
+    });
+
+    assert.equal(logoutResponse.status, 303);
+    assert.equal(logoutResponse.headers.get("location"), "/signup");
+    assert.match(logoutResponse.headers.get("set-cookie"), /Max-Age=0/);
+
+    const dashboardResponse = await request(server, "/dashboard", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+
+    assert.equal(dashboardResponse.status, 303);
+    assert.equal(dashboardResponse.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
+  }
+});
+
 test("home page renders the language toggle script", async () => {
   const server = await listen(app);
 
@@ -333,6 +435,7 @@ test("dashboard page renders with the i18n script and task board shell for signe
     assert.equal(response.status, 200);
     assert.match(body, /data-i18n-document-title="document\.dashboard"/);
     assert.match(body, /id="board-grid"/);
+    assert.match(body, /method="post" action="\/logout"/);
     assert.match(body, /static\/js\/i18n\.js/);
     assert.match(body, /id="cookie-banner"/);
   } finally {

@@ -29,11 +29,22 @@ References:
 - Normalised email addresses before account lookup.
 - Hashed passwords with Node's built-in `crypto.scrypt` before storage.
 - Compared password hashes using `crypto.timingSafeEqual`.
-- Issued a signed `taskify_session` cookie after signup/login.
+- Reserved email addresses during signup so parallel duplicate requests cannot
+  both succeed.
+- Ran unknown-account login attempts through a dummy password hash, keeping the
+  failure path closer to the wrong-password path.
+- Issued a signed `taskify_session` cookie after signup/login. The cookie stores
+  only non-sensitive user identity fields, so dashboard access does not depend
+  on a process-local Map lookup after the token has been signed.
 - Set session cookies with `HttpOnly`, `SameSite=Lax`, `Path=/`, and `Max-Age`.
+- Avoided a public production fallback secret. Development and test use a local
+  fallback, while other environments generate a private per-process secret if
+  `SESSION_SECRET` has not been configured. A stable `SESSION_SECRET` should be
+  configured for deployed environments.
 - Protected `GET /dashboard`; unauthenticated or tampered-session requests now
   redirect to `/signup`.
-- Added `POST /logout` to clear the session cookie.
+- Added `POST /logout` to clear the session cookie and revoke the current
+  session identifier for the running process.
 - Added a small `/favicon.ico` 204 response to remove browser 404 noise during
   runtime checks.
 
@@ -47,6 +58,13 @@ Automated tests cover:
 - duplicate signup returns `409`;
 - invalid email and short passwords return `400`;
 - dashboard blocks unauthenticated and tampered-session requests;
+- malformed cookie encoding is treated as unauthenticated rather than causing a
+  500 response;
+- duplicate parallel signups cannot both succeed;
+- dashboard still accepts a signed session if the process-local user store is
+  empty;
+- logout clears the browser cookie and rejects reuse of the old copied cookie in
+  the current process;
 - dashboard renders normally with a valid session;
 - favicon requests no longer produce a browser 404.
 

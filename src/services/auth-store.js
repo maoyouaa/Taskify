@@ -1,8 +1,12 @@
 const crypto = require("crypto");
 
 const PASSWORD_KEY_LENGTH = 64;
+const DUMMY_PASSWORD_HASH = `taskify-dummy-salt:${crypto
+  .scryptSync("taskify-dummy-password", "taskify-dummy-salt", PASSWORD_KEY_LENGTH)
+  .toString("hex")}`;
 const usersByEmail = new Map();
 const usersById = new Map();
+const pendingEmails = new Set();
 
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
@@ -54,33 +58,36 @@ function toPublicUser(user) {
 async function createUser({ username, email, password }) {
   const normalizedEmail = normalizeEmail(email);
 
-  if (usersByEmail.has(normalizedEmail)) {
+  if (usersByEmail.has(normalizedEmail) || pendingEmails.has(normalizedEmail)) {
     return { ok: false, reason: "duplicate-email" };
   }
 
-  const user = {
-    id: crypto.randomUUID(),
-    username: String(username || "").trim(),
-    email: normalizedEmail,
-    passwordHash: await hashPassword(password),
-    createdAt: new Date().toISOString(),
-  };
+  pendingEmails.add(normalizedEmail);
 
-  usersByEmail.set(normalizedEmail, user);
-  usersById.set(user.id, user);
+  try {
+    const user = {
+      id: crypto.randomUUID(),
+      username: String(username || "").trim(),
+      email: normalizedEmail,
+      passwordHash: await hashPassword(password),
+      createdAt: new Date().toISOString(),
+    };
 
-  return { ok: true, user: toPublicUser(user) };
+    usersByEmail.set(normalizedEmail, user);
+    usersById.set(user.id, user);
+
+    return { ok: true, user: toPublicUser(user) };
+  } finally {
+    pendingEmails.delete(normalizedEmail);
+  }
 }
 
 async function verifyCredentials(email, password) {
   const user = usersByEmail.get(normalizeEmail(email));
+  const passwordHash = user ? user.passwordHash : DUMMY_PASSWORD_HASH;
+  const matches = await verifyPassword(password, passwordHash);
 
-  if (!user) {
-    return null;
-  }
-
-  const matches = await verifyPassword(password, user.passwordHash);
-  return matches ? toPublicUser(user) : null;
+  return user && matches ? toPublicUser(user) : null;
 }
 
 function getUserById(userId) {
@@ -90,6 +97,7 @@ function getUserById(userId) {
 function clearUsersForTests() {
   usersByEmail.clear();
   usersById.clear();
+  pendingEmails.clear();
 }
 
 module.exports = {

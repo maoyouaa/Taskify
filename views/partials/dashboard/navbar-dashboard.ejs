@@ -26,7 +26,9 @@
               <button onclick="myFunction()" class="dashboard-navbar-dropbtn"><span data-i18n="dashboard.user">Lord Voldemort</span> <i class="fa-solid fa-chevron-down"></i></button>
               <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
                 <a href="#" style="font-size: 16px;" data-i18n="dashboard.profile">Profile</a>
-                <a href="#" style="font-size: 16px;" data-i18n="dashboard.logout">Log Out</a>
+                <form method="post" action="/logout">
+                  <button type="submit" style="all: unset; cursor: pointer; font-size: 16px;" data-i18n="dashboard.logout">Log Out</button>
+                </form>
               </div>
             </div>
           </li>

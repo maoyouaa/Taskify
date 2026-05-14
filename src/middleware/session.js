@@ -2,7 +2,21 @@ const crypto = require("crypto");
 
 const SESSION_COOKIE = "taskify_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
-const SESSION_SECRET = process.env.SESSION_SECRET || "taskify-development-session-secret";
+const SESSION_SECRET = resolveSessionSecret();
+const revokedSessionIds = new Set();
+
+function resolveSessionSecret() {
+  if (process.env.SESSION_SECRET) {
+    return process.env.SESSION_SECRET;
+  }
+
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
+    return "taskify-development-session-secret";
+  }
+
+  console.warn("SESSION_SECRET is not set; using a generated per-process secret for this runtime.");
+  return crypto.randomBytes(32).toString("hex");
+}
 
 function parseCookies(cookieHeader) {
   return String(cookieHeader || "")
@@ -18,7 +32,13 @@ function parseCookies(cookieHeader) {
 
       const name = part.slice(0, separatorIndex);
       const value = part.slice(separatorIndex + 1);
-      cookies[name] = decodeURIComponent(value);
+
+      try {
+        cookies[name] = decodeURIComponent(value);
+      } catch (error) {
+        return cookies;
+      }
+
       return cookies;
     }, {});
 }
@@ -40,9 +60,16 @@ function safeEqual(left, right) {
 
 function createSessionToken(user) {
   const now = Math.floor(Date.now() / 1000);
+  const sessionId = crypto.randomUUID();
   const payload = Buffer.from(
     JSON.stringify({
+      sid: sessionId,
       userId: user.id,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
       iat: now,
       exp: now + SESSION_MAX_AGE_SECONDS,
     })
@@ -62,7 +89,13 @@ function verifySessionToken(token) {
     const session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
     const now = Math.floor(Date.now() / 1000);
 
-    if (!session.userId || typeof session.exp !== "number" || session.exp <= now) {
+    if (
+      !session.sid ||
+      !session.userId ||
+      typeof session.exp !== "number" ||
+      session.exp <= now ||
+      revokedSessionIds.has(session.sid)
+    ) {
       return null;
     }
 
@@ -75,6 +108,15 @@ function verifySessionToken(token) {
 function getSession(req) {
   const cookies = parseCookies(req.headers.cookie);
   return verifySessionToken(cookies[SESSION_COOKIE]);
+}
+
+function revokeSession(req) {
+  const cookies = parseCookies(req.headers.cookie);
+  const session = verifySessionToken(cookies[SESSION_COOKIE]);
+
+  if (session) {
+    revokedSessionIds.add(session.sid);
+  }
 }
 
 function createSessionCookie(user) {
@@ -103,5 +145,6 @@ module.exports = {
   createSessionCookie,
   getSession,
   parseCookies,
+  revokeSession,
   verifySessionToken,
 };

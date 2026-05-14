@@ -12,6 +12,7 @@ const {
     clearSessionCookie,
     createSessionCookie,
     getSession,
+    revokeSession,
 } = require("./middleware/session");
 const views_path = path.join(__dirname, "../views");
 const static_path = path.join(__dirname, "../static");
@@ -42,7 +43,12 @@ function isStrongEnoughPassword(value) {
 
 function getAuthenticatedUser(req) {
     const session = getSession(req);
-    return session ? getUserById(session.userId) : null;
+
+    if (!session) {
+        return null;
+    }
+
+    return getUserById(session.userId) || session.user || null;
 }
 
 app.use("/static", express.static(static_path));
@@ -139,6 +145,7 @@ app.post("/login", asyncRoute(async (req, res) => {
 }));
 
 app.post("/logout", (req, res) => {
+    revokeSession(req);
     res.setHeader("Set-Cookie", clearSessionCookie());
     return res.redirect(303, "/signup");
 });

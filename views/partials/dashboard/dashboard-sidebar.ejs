@@ -58,12 +58,14 @@
           </li>
 
           <li class="sidebar-list">
-            <a href="#">
-              <span class="sidebar-icon">
-                <i class="fa-solid fa-right-from-bracket"></i>
-              </span>
-              <span class="sidebar-name" data-i18n="dashboard.logout">Log out</span>
-            </a>
+            <form method="post" action="/logout">
+              <button type="submit" style="all: unset; cursor: pointer;">
+                <span class="sidebar-icon">
+                  <i class="fa-solid fa-right-from-bracket"></i>
+                </span>
+                <span class="sidebar-name" data-i18n="dashboard.logout">Log out</span>
+              </button>
+            </form>
           </li>
         </div>
       </ul>
