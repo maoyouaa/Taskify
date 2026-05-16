@@ -16,6 +16,13 @@
   font-size:30px;
 }
 
+.sidebar-header a:focus-visible,
+.sidebar-items ul li a:focus-visible {
+  outline: 3px solid rgba(12, 126, 166, 0.35);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
 .logo{
   width: 70px;
   padding-top: 5px;
@@ -71,6 +78,14 @@
   border-radius: 5px;
   transition: all .5s ease;
   width: 250px;
+}
+
+.sidebar-items ul li a[aria-current="page"] {
+  background-color: #eef7fb;
+  color: #0c7ea6;
+  border-radius: 5px;
+  width: 250px;
+  font-weight: 700;
 }
 
 .sidebar-items ul li a .sidebar-icon {

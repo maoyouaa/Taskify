@@ -133,6 +133,19 @@ test("dashboard page renders with the i18n script and task board shell", async (
     assert.equal(response.status, 200);
     assert.match(body, /data-i18n-document-title="document\.dashboard"/);
     assert.match(body, /id="board-grid"/);
+    assert.match(body, /id="form-message" class="form-message" role="status" aria-live="polite"/);
+    assert.match(body, /<form action="#" class="dashboard-navbar-search-bar" role="search" aria-label="Dashboard search">/);
+    assert.match(body, /<label class="sr-only" for="dashboard-search"/);
+    assert.match(body, /id="dashboard-search" name="search" type="text"/);
+    assert.match(body, /aria-label="Help"/);
+    assert.match(body, /aria-label="Notifications"/);
+    assert.match(body, /aria-label="Open profile"/);
+    assert.match(body, /aria-label="Open dashboard navigation"/);
+    assert.match(body, /aria-current="page" aria-label="Projects"/);
+    assert.match(body, /aria-haspopup="menu"/);
+    assert.match(body, /aria-expanded="false"/);
+    assert.match(body, /aria-controls="dashboard-navbar-myDropdown"/);
+    assert.match(body, /id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content" role="menu"/);
     assert.match(body, /static\/js\/i18n\.js/);
     assert.match(body, /id="cookie-banner"/);
   } finally {
