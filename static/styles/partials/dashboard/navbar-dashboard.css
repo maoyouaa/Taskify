@@ -88,7 +88,28 @@
   display: block;
 }
 
+.dashboard-navbar-dropdown-form {
+  margin: 0;
+}
+
+.dashboard-navbar-dropdown-action {
+  width: 100%;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
 .dashboard-navbar-dropdown a:hover {background-color: #ddd;}
+
+.dashboard-navbar-dropdown-action:hover {
+  background-color: #ddd;
+}
 
 .dashboard-navbar-show {display: block;}
 /* .dashboard-navbar-profile-icon {
@@ -138,6 +159,7 @@
 .dashboard-navbar-search-bar button:focus-visible,
 .dashboard-navbar-search-bar input:focus-visible,
 .dashboard-navbar-dashboard-navbar-links a:focus-visible,
+.dashboard-navbar-dropdown-action:focus-visible,
 .dashboard-navbar-dropbtn:focus-visible,
 .lang-switch-button:focus-visible {
   outline: 3px solid rgba(12, 126, 166, 0.35);

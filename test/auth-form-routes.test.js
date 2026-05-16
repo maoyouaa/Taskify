@@ -1,10 +1,27 @@
 const assert = require("node:assert/strict");
-const test = require("node:test");
+const { beforeEach, test } = require("node:test");
 const app = require("../src/app");
+const { clearUsersForTests } = require("../src/services/auth-store");
+const { SESSION_COOKIE } = require("../src/middleware/session");
+
+let emailCounter = 0;
 
 function listen(appInstance) {
   return new Promise((resolve) => {
     const server = appInstance.listen(0, () => resolve(server));
+  });
+}
+
+function close(server) {
+  return new Promise((resolve, reject) => {
+    server.close((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve();
+    });
   });
 }
 
@@ -19,30 +36,83 @@ async function request(server, path, options = {}) {
   });
 }
 
-test("signup form submission redirects to the dashboard", async () => {
+function nextEmail(prefix = "alex") {
+  emailCounter += 1;
+  return `${prefix}.${emailCounter}@example.com`;
+}
+
+function getSessionCookie(response) {
+  const setCookie = response.headers.get("set-cookie");
+
+  assert.match(setCookie, new RegExp(`^${SESSION_COOKIE}=`));
+  assert.match(setCookie, /HttpOnly/);
+  assert.match(setCookie, /SameSite=Lax/);
+
+  return setCookie.split(";")[0];
+}
+
+async function signup(server, overrides = {}) {
+  const body = new URLSearchParams({
+    SignUpUsername: overrides.username || "Alex",
+    SignUpEmail: overrides.email || nextEmail(),
+    SignUpPassword: overrides.password || "password123",
+  });
+
+  const response = await request(server, "/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  assert.equal(response.status, 303);
+  assert.equal(response.headers.get("location"), "/dashboard");
+
+  return getSessionCookie(response);
+}
+
+beforeEach(() => {
+  clearUsersForTests();
+});
+
+test("signup form submission creates a session and redirects to the dashboard", async () => {
   const server = await listen(app);
 
   try {
-    const response = await request(server, "/signup", {
+    await signup(server, { email: nextEmail("signup") });
+  } finally {
+    await close(server);
+  }
+});
+
+test("login form submission verifies stored credentials before redirecting", async () => {
+  const server = await listen(app);
+  const email = nextEmail("login");
+
+  try {
+    await signup(server, { email, password: "password123" });
+
+    const response = await request(server, "/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        SignUpUsername: "Alex",
-        SignUpEmail: "alex@example.com",
-        SignUpPassword: "password123",
+        LoginEmail: email,
+        LoginPassword: "password123",
       }),
     });
 
     assert.equal(response.status, 303);
     assert.equal(response.headers.get("location"), "/dashboard");
+    getSessionCookie(response);
   } finally {
-    server.close();
+    await close(server);
   }
 });
 
-test("login form submission redirects to the dashboard", async () => {
+test("login form submission rejects unknown accounts", async () => {
   const server = await listen(app);
 
   try {
@@ -52,15 +122,107 @@ test("login form submission redirects to the dashboard", async () => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        LoginEmail: "alex@example.com",
+        LoginEmail: nextEmail("unknown"),
         LoginPassword: "password123",
       }),
     });
+    const body = await response.json();
 
-    assert.equal(response.status, 303);
-    assert.equal(response.headers.get("location"), "/dashboard");
+    assert.equal(response.status, 401);
+    assert.equal(body.success, false);
+    assert.equal(body.errors.credentials, "Email or password is incorrect.");
   } finally {
-    server.close();
+    await close(server);
+  }
+});
+
+test("login form submission rejects an incorrect password", async () => {
+  const server = await listen(app);
+  const email = nextEmail("wrong-password");
+
+  try {
+    await signup(server, { email, password: "password123" });
+
+    const response = await request(server, "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        LoginEmail: email,
+        LoginPassword: "not-the-password",
+      }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 401);
+    assert.equal(body.success, false);
+    assert.equal(body.errors.credentials, "Email or password is incorrect.");
+  } finally {
+    await close(server);
+  }
+});
+
+test("signup form submission rejects duplicate email addresses", async () => {
+  const server = await listen(app);
+  const email = nextEmail("duplicate");
+
+  try {
+    await signup(server, { email, password: "password123" });
+
+    const response = await request(server, "/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        SignUpUsername: "Alex Again",
+        SignUpEmail: email.toUpperCase(),
+        SignUpPassword: "password123",
+      }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 409);
+    assert.equal(body.success, false);
+    assert.equal(body.errors.email, "An account already exists for this email address.");
+  } finally {
+    await close(server);
+  }
+});
+
+test("concurrent signup attempts reserve duplicate email addresses", async () => {
+  const server = await listen(app);
+  const email = nextEmail("parallel-duplicate");
+  const body = () =>
+    new URLSearchParams({
+      SignUpUsername: "Alex",
+      SignUpEmail: email,
+      SignUpPassword: "password123",
+    });
+
+  try {
+    const responses = await Promise.all([
+      request(server, "/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body(),
+      }),
+      request(server, "/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body(),
+      }),
+    ]);
+    const statuses = responses.map((response) => response.status).sort();
+
+    assert.deepEqual(statuses, [303, 409]);
+  } finally {
+    await close(server);
   }
 });
 
@@ -85,7 +247,129 @@ test("auth form submissions reject invalid email input", async () => {
     assert.equal(body.success, false);
     assert.equal(body.errors.email, "Enter a valid email address.");
   } finally {
-    server.close();
+    await close(server);
+  }
+});
+
+test("signup form submissions reject short passwords", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        SignUpUsername: "Alex",
+        SignUpEmail: nextEmail("short-password"),
+        SignUpPassword: "short",
+      }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.success, false);
+    assert.equal(body.errors.password, "Password must be at least 8 characters.");
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard redirects unauthenticated users to the signup page", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/dashboard");
+
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard rejects tampered session cookies", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: `${SESSION_COOKIE}=not-a-valid-session`,
+      },
+    });
+
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard treats malformed cookie encoding as unauthenticated", async () => {
+  const server = await listen(app);
+
+  try {
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: `${SESSION_COOKIE}=%`,
+      },
+    });
+
+    assert.equal(response.status, 303);
+    assert.equal(response.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard accepts a signed session without process-local user state", async () => {
+  const server = await listen(app);
+
+  try {
+    const cookie = await signup(server, { email: nextEmail("stateless-session") });
+    clearUsersForTests();
+
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    const body = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.match(body, /id="board-grid"/);
+  } finally {
+    await close(server);
+  }
+});
+
+test("logout clears the browser cookie and revokes the current session", async () => {
+  const server = await listen(app);
+
+  try {
+    const cookie = await signup(server, { email: nextEmail("logout") });
+    const logoutResponse = await request(server, "/logout", {
+      method: "POST",
+      headers: {
+        Cookie: cookie,
+      },
+    });
+
+    assert.equal(logoutResponse.status, 303);
+    assert.equal(logoutResponse.headers.get("location"), "/signup");
+    assert.match(logoutResponse.headers.get("set-cookie"), /Max-Age=0/);
+
+    const dashboardResponse = await request(server, "/dashboard", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+
+    assert.equal(dashboardResponse.status, 303);
+    assert.equal(dashboardResponse.headers.get("location"), "/signup");
+  } finally {
+    await close(server);
   }
 });
 
@@ -103,7 +387,7 @@ test("home page renders the language toggle script", async () => {
     assert.match(body, /id="cookie-banner"/);
     assert.match(body, /type="module" src="\/static\/js\/site\.js"/);
   } finally {
-    server.close();
+    await close(server);
   }
 });
 
@@ -117,22 +401,41 @@ test("signup page renders bilingual auth controls", async () => {
     assert.equal(response.status, 200);
     assert.match(body, /data-i18n="signup\.title"/);
     assert.match(body, /data-i18n="login\.title"/);
+    assert.match(body, /name="auth-mode-toggle"/);
     assert.match(body, /data-i18n-placeholder="signup\.placeholder\.username"/);
   } finally {
-    server.close();
+    await close(server);
   }
 });
 
-test("dashboard page renders with the i18n script and task board shell", async () => {
+test("favicon requests do not create browser 404 noise", async () => {
   const server = await listen(app);
 
   try {
-    const response = await request(server, "/dashboard");
+    const response = await request(server, "/favicon.ico");
+
+    assert.equal(response.status, 204);
+  } finally {
+    await close(server);
+  }
+});
+
+test("dashboard page renders with the i18n script and task board shell for signed-in users", async () => {
+  const server = await listen(app);
+
+  try {
+    const cookie = await signup(server, { email: nextEmail("dashboard") });
+    const response = await request(server, "/dashboard", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
     const body = await response.text();
 
     assert.equal(response.status, 200);
     assert.match(body, /data-i18n-document-title="document\.dashboard"/);
     assert.match(body, /id="board-grid"/);
+    assert.match(body, /method="post" action="\/logout"/);
     assert.match(body, /id="form-message" class="form-message" role="status" aria-live="polite"/);
     assert.match(body, /<form action="#" class="dashboard-navbar-search-bar" role="search" aria-label="Dashboard search">/);
     assert.match(body, /<label class="sr-only" for="dashboard-search"/);
@@ -149,7 +452,7 @@ test("dashboard page renders with the i18n script and task board shell", async (
     assert.match(body, /static\/js\/i18n\.js/);
     assert.match(body, /id="cookie-banner"/);
   } finally {
-    server.close();
+    await close(server);
   }
 });
 
@@ -165,6 +468,6 @@ test("privacy page renders the dedicated policy content", async () => {
     assert.match(body, /data-i18n="privacy\.collectTitle"/);
     assert.match(body, /href="\/privacy"/);
   } finally {
-    server.close();
+    await close(server);
   }
 });

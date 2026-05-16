@@ -39,7 +39,16 @@
               </button>
               <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content" role="menu">
                 <a href="#" style="font-size: 16px;" role="menuitem" data-i18n="dashboard.profile">Profile</a>
-                <a href="#" style="font-size: 16px;" role="menuitem" data-i18n="dashboard.logout">Log Out</a>
+                <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
+                  <button
+                    type="submit"
+                    class="dashboard-navbar-dropdown-action"
+                    role="menuitem"
+                    data-i18n="dashboard.logout"
+                  >
+                    Log Out
+                  </button>
+                </form>
               </div>
             </div>
           </li>
