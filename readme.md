@@ -13,6 +13,7 @@
 <a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square"></a>
 <a href="https://github.com/DSCKGEC/Taskify/graphs/contributors"><img src="https://img.shields.io/github/contributors-anon/sudip-101/Taskify"></a>
 <a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/maintenance/yes/2022"></a>
+<a href="https://codecov.io/gh/maoyouaa/Taskify"><img src="https://codecov.io/gh/maoyouaa/Taskify/branch/main/graph/badge.svg" alt="Codecov coverage"></a>
 </p> 
 
 
