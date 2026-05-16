@@ -1,11 +1,12 @@
 <header class="dashboard-header-navbar">
   <div class="dashboard-navbar-container">
     <nav class="dashboard-navbar-dashboard-navbar">
-      <form action="#" class="dashboard-navbar-search-bar">
-        <button type="submit" data-i18n-aria-label="dashboard.search">
+      <form action="#" class="dashboard-navbar-search-bar" role="search" aria-label="Dashboard search">
+        <label class="sr-only" for="dashboard-search" data-i18n="dashboard.search">Search</label>
+        <button type="submit" data-i18n-aria-label="dashboard.search" aria-label="Search dashboard">
           <i class="fas fa-search"></i>
         </button>
-        <input type="text" data-i18n-placeholder="dashboard.search" placeholder="Search" />
+        <input id="dashboard-search" name="search" type="text" data-i18n-placeholder="dashboard.search" placeholder="Search" />
       </form>
       <div class="dashboard-navbar-dashboard-links">
         <ul class="dashboard-navbar-dashboard-navbar-links">
@@ -16,24 +17,45 @@
             </div>
           </li>
           <li>
-            <a href="#"><i class="fa-regular fa-circle-question"></i></a>
+            <a href="#" aria-label="Help">
+              <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+            </a>
           </li>
           <li>
-            <a href="#" class="dashboard-navbar-bell-icon"><i class="far fa-bell"></i></a>
+            <a href="#" class="dashboard-navbar-bell-icon" aria-label="Notifications">
+              <i class="far fa-bell" aria-hidden="true"></i>
+            </a>
           </li>
           <li>
             <div class="dashboard-navbar-dropdown">
-              <button onclick="myFunction()" class="dashboard-navbar-dropbtn"><span data-i18n="dashboard.user">Lord Voldemort</span> <i class="fa-solid fa-chevron-down"></i></button>
-              <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content">
-                <a href="#" style="font-size: 16px;" data-i18n="dashboard.profile">Profile</a>
-                <form method="post" action="/logout">
-                  <button type="submit" style="all: unset; cursor: pointer; font-size: 16px;" data-i18n="dashboard.logout">Log Out</button>
+              <button
+                type="button"
+                class="dashboard-navbar-dropbtn"
+                aria-haspopup="menu"
+                aria-expanded="false"
+                aria-controls="dashboard-navbar-myDropdown"
+              >
+                <span data-i18n="dashboard.user">Lord Voldemort</span> <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div id="dashboard-navbar-myDropdown" class="dashboard-navbar-dropdown-content" role="menu">
+                <a href="#" style="font-size: 16px;" role="menuitem" data-i18n="dashboard.profile">Profile</a>
+                <form method="post" action="/logout" class="dashboard-navbar-dropdown-form">
+                  <button
+                    type="submit"
+                    class="dashboard-navbar-dropdown-action"
+                    role="menuitem"
+                    data-i18n="dashboard.logout"
+                  >
+                    Log Out
+                  </button>
                 </form>
               </div>
             </div>
           </li>
           <li>
-            <a href="#"><i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon"></i></a>
+            <a href="#" aria-label="Open profile">
+              <i class="fa-regular fa-user dashboard-navbar-link-img dashboard-navbar-profile-icon" aria-hidden="true"></i>
+            </a>
           </li>
         </ul>
       </div>
@@ -41,20 +63,30 @@
   </div>
 </header>
 <script>
-function myFunction() {
-  document.getElementById("dashboard-navbar-myDropdown").classList.toggle("dashboard-navbar-show");
+const dropdownButton = document.querySelector(".dashboard-navbar-dropbtn");
+const dropdownMenu = document.getElementById("dashboard-navbar-myDropdown");
+
+function closeDashboardDropdown() {
+  dropdownMenu.classList.remove("dashboard-navbar-show");
+  dropdownButton.setAttribute("aria-expanded", "false");
 }
 
-window.onclick = function(event) {
-  if (!event.target.matches(".dashboard-navbar-dropbtn")) {
-    var dropdowns = document.getElementsByClassName("dashboard-navbar-dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("dashboard-navbar-show")) {
-        openDropdown.classList.remove("dashboard-navbar-show");
-      }
-    }
-  }
+function toggleDashboardDropdown() {
+  const isOpen = dropdownMenu.classList.toggle("dashboard-navbar-show");
+  dropdownButton.setAttribute("aria-expanded", String(isOpen));
 }
+
+dropdownButton.addEventListener("click", toggleDashboardDropdown);
+dropdownButton.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeDashboardDropdown();
+    dropdownButton.focus();
+  }
+});
+
+window.addEventListener("click", (event) => {
+  if (!event.target.closest(".dashboard-navbar-dropdown")) {
+    closeDashboardDropdown();
+  }
+});
 </script>
