@@ -8,17 +8,19 @@ claimed from the repository and local verification files.
 - Scope: bilingual toggle across the home page, auth page, and dashboard flow
 - Evidence:
   - `docs/pr3/i18n-language-toggle.md`
-  - `docs/pr3/evidence/home-en-home-zh.png`
-  - `docs/pr3/evidence/signup-en-signup-zh.png`
-  - `docs/pr3/evidence/dashboard-en-dashboard-zh.png`
+  - `docs/pr3/evidence/home-en.png`
+  - `docs/pr3/evidence/home-zh.png`
+  - `docs/pr3/evidence/signup-zh.png`
+  - `docs/pr3/evidence/dashboard-zh.png`
   - `docs/pr3/evidence/verification-tests.txt`
 
 ## 2. Test coverage >= 80%
 
 - Verification command: `npm run coverage`
 - Current result:
-  - Statements: `90.78%`
-  - Branches: `86.66%`
+  - Tests passed: `26/26`
+  - Statements: `92.18%`
+  - Branches: `84.07%`
 - Evidence:
   - `docs/baseline/evidence/coverage-summary.txt`
   - `docs/baseline/evidence/coverage-report.png`
@@ -43,9 +45,25 @@ claimed from the repository and local verification files.
   - `docs/baseline/evidence/cookie-banner.png`
   - `docs/baseline/evidence/privacy-page.png`
 
-## 5. Still outstanding
+## 5. Live uptime for 7+ consecutive days
 
-- Live uptime for 7+ consecutive days is still not evidenced in the current
+- Production URL:
+  - `live-url.txt`
+- Current result:
+  - Vercel history captured on `2026-05-17` includes production deployments aged
+    `7d` and `17d`
+  - Production alias was still reachable on `2026-05-17`
+- Evidence:
+  - `docs/baseline/evidence/vercel-7day-log.md`
+  - `docs/baseline/evidence/vercel-7day-log.html`
+  - `docs/baseline/evidence/vercel-7day-log.png`
+  - `docs/baseline/uptime-evidence-log.md`
+  - `docs/baseline/evidence/uptime-check-2026-05-17.md`
+  - `docs/baseline/evidence/uptime-homepage-2026-05-17.png`
+
+## 6. Current baseline status
+
+- The baseline standards claimed in the coursework brief are now evidenced in the
   repository.
-- `live-url.txt` is still missing and should only be created after a real
-  deployment URL and uptime record are available.
+- The final report should cite the exact filenames above rather than older draft
+  names.

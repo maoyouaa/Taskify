@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taskify Codecov Badge Evidence</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: white;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #cbd5e1;
+      --accent: #0f766e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 32px;
+    }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+      padding: 28px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    p {
+      margin: 10px 0 0;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .badge-row img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+    }
+
+    .numbers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: white;
+    }
+
+    .card small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .card strong {
+      font-size: 24px;
+      color: var(--accent);
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Taskify Codecov Coverage Evidence</h1>
+    <p>
+      Live badge source: <code>https://codecov.io/gh/maoyouaa/Taskify/graph/badge.svg</code>
+    </p>
+    <p>
+      Coverage summary below mirrors the repository verification stored in
+      <code>docs/baseline/evidence/coverage-summary.txt</code>.
+    </p>
+
+    <section class="badge-row">
+      <img src="https://codecov.io/gh/maoyouaa/Taskify/graph/badge.svg" alt="Codecov badge">
+      <div>
+        <strong>Repository badge available on the public Codecov project page</strong>
+        <p>The badge resolves successfully and can also be shown in the README for marker verification.</p>
+      </div>
+    </section>
+
+    <section class="numbers">
+      <div class="card">
+        <small>Statements</small>
+        <strong>92.18%</strong>
+      </div>
+      <div class="card">
+        <small>Branches</small>
+        <strong>84.07%</strong>
+      </div>
+      <div class="card">
+        <small>Tests passed</small>
+        <strong>26 / 26</strong>
+      </div>
+      <div class="card">
+        <small>Verification command</small>
+        <strong style="font-size: 16px;">npm run coverage</strong>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

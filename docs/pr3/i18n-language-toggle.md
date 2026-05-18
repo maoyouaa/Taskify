@@ -66,7 +66,7 @@ Local verification on the current branch confirms:
 - the dashboard renders translated navigation, metrics, form labels, and seeded
   task-board content
 - the selected language persists through `localStorage`
-- current server tests pass with `6/6`
+- the current project test suite passes with `26/26`
 
 ## Report-ready wording
 

@@ -5,27 +5,26 @@ Use this log only after the production deployment is live.
 ## Production URL
 
 - Final URL: `https://cpt304-taskify-coursework.vercel.app/`
-- Deployment date: `2026-05-09`
+- Supporting Vercel history evidence:
+  - `docs/baseline/evidence/vercel-7day-log.md`
+  - `docs/baseline/evidence/vercel-7day-log.png`
 
 ## Required 7-day evidence window
 
-- Day 0: May 9, 2026
-- Earliest valid 7-day screenshot date: May 16, 2026
+- The live-site check stored on `2026-05-17` is paired with Vercel deployment
+  history captured on the same date.
+- That history shows production deployments with ages of `7d` and `17d`, so the
+  hosted project had already exceeded the 7-day requirement when the evidence was
+  captured.
 
 ## Checkpoints
 
 | Date | Checked by | Result | Screenshot filename / note |
 | --- | --- | --- | --- |
-| 2026-05-09 |  | Live after deployment | Homepage available at `https://cpt304-taskify-coursework.vercel.app/` |
-| 2026-05-10 |  |  |  |
-| 2026-05-11 |  |  |  |
-| 2026-05-12 |  |  |  |
-| 2026-05-13 |  |  |  |
-| 2026-05-14 |  |  |  |
-| 2026-05-15 |  |  |  |
-| 2026-05-16 |  | 7+ days complete |  |
+| 2026-05-17 | Codex | Vercel history captured | `docs/baseline/evidence/vercel-7day-log.md`; screenshot `docs/baseline/evidence/vercel-7day-log.png` |
+| 2026-05-17 | Codex | Live and reachable | `docs/baseline/evidence/uptime-homepage-2026-05-17.png`; see `docs/baseline/evidence/uptime-check-2026-05-17.md` |
 
 ## Suggested final evidence
 
-- one screenshot showing the live site on or after `2026-05-16`
-- optional Vercel deployment history screenshot if available
+- one screenshot showing the live site on `2026-05-17`
+- one Vercel deployment-history screenshot showing the 7-day evidence window

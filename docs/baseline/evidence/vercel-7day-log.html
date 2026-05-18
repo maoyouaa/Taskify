@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taskify Vercel 7-Day Evidence</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --line: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #e5e7eb;
+      color: #0f172a;
+      padding: 32px;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+    }
+
+    header {
+      padding: 24px 28px 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    p {
+      margin: 10px 0 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .meta {
+      color: #475569;
+    }
+
+    .terminal {
+      margin: 20px 24px 24px;
+      background: var(--bg);
+      color: var(--text);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #020617;
+    }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: #020617;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 18px 20px 22px;
+      font: 15px/1.45 Consolas, "Courier New", monospace;
+      white-space: pre-wrap;
+    }
+
+    .ok {
+      color: var(--accent);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Taskify Vercel Deployment History</h1>
+      <p>
+        Public deployment history captured on <strong>2026-05-17</strong> using
+        <code>npx.cmd --yes vercel ls cpt304-taskify-coursework</code>.
+      </p>
+      <p class="meta">
+        Evidence of the coursework uptime window appears in the production rows
+        at <strong>7d</strong> and <strong>17d</strong>, with the project still
+        reachable at the current production alias.
+      </p>
+    </header>
+
+    <section class="terminal">
+      <div class="bar">
+        <span>cmd.exe</span>
+        <span>vercel deployment history excerpt</span>
+      </div>
+      <pre>Fetching deployments in g3519230338-3646s-projects
+&gt; Deployments for g3519230338-3646s-projects/cpt304-taskify-coursework [574ms]
+
+Age     Project                                              Deployment                                                                        Status      Environment     Duration
+<span class="ok">7d      g3519230338-3646s-projects/cpt304-taskify-coursework https://cpt304-taskify-coursework-m3njy8hw4-g3519230338-3646s-projects.vercel.app ● Ready     Production      10s</span>
+<span class="ok">7d      g3519230338-3646s-projects/cpt304-taskify-coursework https://cpt304-taskify-coursework-o504awnk4-g3519230338-3646s-projects.vercel.app ● Ready     Production      5s</span>
+<span class="ok">17d     g3519230338-3646s-projects/cpt304-taskify-coursework https://cpt304-taskify-coursework-4fubd4jae-g3519230338-3646s-projects.vercel.app ● Ready     Production      13s</span>
+1h      g3519230338-3646s-projects/cpt304-taskify-coursework https://cpt304-taskify-coursework-e6uncts41-g3519230338-3646s-projects.vercel.app ● Ready     Production      8s
+
+Alias in use
+https://cpt304-taskify-coursework.vercel.app</pre>
+    </section>
+  </main>
+</body>
+</html>

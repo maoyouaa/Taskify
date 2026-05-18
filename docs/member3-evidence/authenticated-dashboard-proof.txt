@@ -1,0 +1,25 @@
+Verification date: 2026-05-17
+Target route: http://127.0.0.1:3053/dashboard
+Verification method: authenticated local signup followed by dashboard fetch
+
+Session creation result
+- signup status: 303
+- redirect location: /dashboard
+
+Authenticated dashboard result
+- dashboard status: 200
+
+Verified dashboard markers in returned HTML
+- id="form-message" = True
+- id="metric-total" = True
+- id="task-form" = True
+- id="board-grid" = True
+- dashboard-button-primary = True
+- dashboard-button-secondary = True
+
+Interpretation
+- The authenticated dashboard route renders the task workspace shell introduced
+  by the task feedback/actions contribution.
+- The current screenshot proof in
+  docs/member3-evidence/dashboard-task-actions-proof.png shows the same
+  interaction model rendered in the browser.
