@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DSCKGEC/Taskify.git"
+    "url": "git+https://github.com/maoyouaa/Taskify.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DSCKGEC/Taskify/issues"
+    "url": "https://github.com/maoyouaa/Taskify/issues"
   },
-  "homepage": "https://github.com/DSCKGEC/Taskify#readme",
+  "homepage": "https://github.com/maoyouaa/Taskify#readme",
   "devDependencies": {
     "c8": "^10.1.3",
     "nodemon": "^2.0.19"

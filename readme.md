@@ -2,17 +2,18 @@
 
 <div align="center">
   <h1>Welcome to Taskify 👋💻</h1>
-  <h3>Live Website for Taskify : <a href="#">Click Here!</a></h3>
+  <h3>Live Website for Taskify: <a href="https://cpt304-taskify-coursework.vercel.app/">https://cpt304-taskify-coursework.vercel.app/</a></h3>
 </div>
 
 <br>
 
 <p align="center">
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat&logo=github"></a> 
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/badge/Open%20Source-%F0%9F%A4%8D-Green"></a> 
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square"></a>
-<a href="https://github.com/DSCKGEC/Taskify/graphs/contributors"><img src="https://img.shields.io/github/contributors-anon/sudip-101/Taskify"></a>
-<a href="https://github.com/DSCKGEC/Taskify"><img src="https://img.shields.io/maintenance/yes/2022"></a>
+<a href="https://codecov.io/gh/maoyouaa/Taskify"><img src="https://codecov.io/gh/maoyouaa/Taskify/graph/badge.svg" alt="Codecov badge"></a>
+<a href="https://github.com/maoyouaa/Taskify"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat&logo=github"></a> 
+<a href="https://github.com/maoyouaa/Taskify"><img src="https://img.shields.io/badge/Open%20Source-%F0%9F%A4%8D-Green"></a> 
+<a href="https://github.com/maoyouaa/Taskify"><img src="https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=flat-square"></a>
+<a href="https://github.com/maoyouaa/Taskify/graphs/contributors"><img src="https://img.shields.io/github/contributors-anon/maoyouaa/Taskify"></a>
+<a href="https://github.com/maoyouaa/Taskify"><img src="https://img.shields.io/maintenance/yes/2026"></a>
 </p> 
 
 
@@ -66,7 +67,7 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 
 If you want to work on this unique project and share it with the world, you can do that here. 
-Go through the contributing guidelines [here](https://github.com/DSCKGEC/Taskify/blob/main/contributing.md).
+Go through the contributing guidelines [here](https://github.com/maoyouaa/Taskify/blob/main/contributing.md).
 
 Subsequently, also go through the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
@@ -74,9 +75,9 @@ Subsequently, also go through the GitHub documentation on [creating a pull reque
 
 ##  Templates to Follow
 
-- [Feature request](https://github.com/DSCKGEC/Taskify/blob/main/.github/ISSUE_TEMPLATE/feature_request.md)
-- [Bug Report](https://github.com/DSCKGEC/Taskify/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
-- [Pull Request](https://github.com/DSCKGEC/Taskify/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
+- [Feature request](https://github.com/maoyouaa/Taskify/blob/main/.github/ISSUE_TEMPLATE/feature_request.md)
+- [Bug Report](https://github.com/maoyouaa/Taskify/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
+- [Pull Request](https://github.com/maoyouaa/Taskify/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
 
 **Note** : One should follow these templates while creating a new issue or pull request.
 
@@ -124,7 +125,7 @@ Folder structure of this project for your reference
 
 - Then in GitHub, in your cloned repository, find the option to make a pull request. 
 
-**NOTE** : For more details <a href="https://github.com/DSCKGEC/Taskify/blob/main/contributing.md">Click Here!</a>
+**NOTE** : For more details <a href="https://github.com/maoyouaa/Taskify/blob/main/contributing.md">Click Here!</a>
 
 ## Installation
 
@@ -175,8 +176,8 @@ Special thanks goes to all of the mentees who made a choice to make an impact. C
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/DSCKGEC/Taskify/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=DSCKGEC/Taskify" />
+<a href="https://github.com/maoyouaa/Taskify/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=maoyouaa/Taskify" />
 </a>
 
 <!-- markdownlint-enable -->
@@ -186,12 +187,12 @@ Special thanks goes to all of the mentees who made a choice to make an impact. C
 
 ##  Code Of Conduct
 
-You can find our Code of Conduct [here](https://github.com/DSCKGEC/Taskify/blob/main/code_of_conduct.md).
+You can find our Code of Conduct [here](https://github.com/maoyouaa/Taskify/blob/main/code_of_conduct.md).
 
 
 ##  License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/DSCKGEC/Taskify/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/maoyouaa/Taskify/blob/main/LICENSE) file for details.
 
 
 ##  Project Admin
